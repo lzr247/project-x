@@ -1,13 +1,13 @@
 import express from "express";
+import indexRoutes from "./routes/index.routes";
+import "dotenv/config";
 
 const app = express();
-const PORT = 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.json({ message: "Server is ON." });
-});
+app.use("/api", indexRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on PORT http://localhost:${PORT}`);
