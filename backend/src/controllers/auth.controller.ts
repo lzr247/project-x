@@ -12,7 +12,9 @@ export const register = async (req: Request, res: Response) => {
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists." });
+      return res
+        .status(400)
+        .json({ message: "Registration failed. Please try again." });
     }
 
     // Hash password
@@ -34,7 +36,7 @@ export const register = async (req: Request, res: Response) => {
 
     return res.status(201).json({ user: userWithoutPassword, token });
   } catch (error) {
-    res.status(500).json({ message: "Server error." });
+    return res.status(500).json({ message: "Server error." });
   }
 };
 
@@ -67,6 +69,6 @@ export const login = async (req: Request, res: Response) => {
 
     return res.status(200).json({ user: userWithoutPassword, token });
   } catch (error) {
-    res.status(500).json({ message: "Server error." });
+    return res.status(500).json({ message: "Server error." });
   }
 };
