@@ -46,3 +46,46 @@ export const validateLogin = [
   body("password").notEmpty().withMessage("Password is required"),
   handleValidationErrors,
 ];
+
+// Create project validation
+export const validateCreateProject = [
+  body("title")
+    .notEmpty()
+    .withMessage("Title is required")
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Title must be between 1 and 100 characters."),
+  body("description")
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage("Description must be less than 500 characters."),
+  body("color")
+    .optional()
+    .matches(/^#[0-9A-Fa-f]{6}$/)
+    .withMessage("Color must be a valid hex code (e.g., #3B82F6)."),
+  handleValidationErrors,
+];
+
+// Update project validation
+export const validateUpdateProject = [
+  body("title")
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Title must be between 1 and 100 characters"),
+  body("description")
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage("Description must be less than 500 characters"),
+  body("color")
+    .optional()
+    .matches(/^#[0-9A-Fa-f]{6}$/)
+    .withMessage("Color must be a valid hex code (e.g., #3B82F6)"),
+  body("isCompleted")
+    .optional()
+    .isBoolean()
+    .withMessage("isCompleted must be a boolean"),
+  handleValidationErrors,
+];
