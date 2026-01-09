@@ -124,3 +124,16 @@ export const validateUpdateGoal = [
     .withMessage("isCompleted must be a boolean"),
   handleValidationErrors,
 ];
+
+// Pomodoro start validation
+export const validateStartPomodoro = [
+  body("duration")
+    .optional()
+    .isInt({ min: 1, max: 120 })
+    .withMessage("Duration must be between 1 and 120 minutes"),
+  body("projectId")
+    .optional()
+    .isString()
+    .withMessage("Project ID must be a string"),
+  handleValidationErrors,
+];
