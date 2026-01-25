@@ -7,10 +7,7 @@ import {
   deleteProject,
 } from "../controllers/project.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
-import {
-  validateCreateProject,
-  validateUpdateProject,
-} from "../middleware/validation.middleware";
+import { validateCreateProject, validateUpdateProject } from "../middleware/validation.middleware";
 
 const router = express.Router();
 

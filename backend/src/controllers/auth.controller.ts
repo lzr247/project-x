@@ -12,9 +12,7 @@ export const register = async (req: Request, res: Response) => {
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (existingUser) {
-      return res
-        .status(400)
-        .json({ message: "Registration failed. Please try again." });
+      return res.status(400).json({ message: "Registration failed. Please try again." });
     }
 
     // Hash password
