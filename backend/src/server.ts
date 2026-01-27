@@ -1,12 +1,12 @@
-import express from "express";
 import cors from "cors";
-import indexRoutes from "./routes/index.routes";
-import authRoutes from "./routes/auth.routes";
-import projectRoutes from "./routes/project.routes";
-import goalRoutes from "./routes/goal.routes";
-import pomodoroRoutes from "./routes/pomodoro.routes";
-import { notFoundHandler, errorHandler } from "./middleware/error.middleware";
 import "dotenv/config";
+import express from "express";
+import { errorHandler, notFoundHandler } from "./middleware/error.middleware";
+import authRoutes from "./routes/auth.routes";
+import goalRoutes from "./routes/goal.routes";
+import indexRoutes from "./routes/index.routes";
+import pomodoroRoutes from "./routes/pomodoro.routes";
+import projectRoutes from "./routes/project.routes";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;

@@ -36,7 +36,9 @@ export const getProjectById = async (req: Request, res: Response) => {
     });
 
     if (!project) {
-      return res.status(404).json({ success: false, message: "Project not found." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Project not found." });
     }
 
     return res.status(200).json({

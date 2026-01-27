@@ -1,6 +1,10 @@
 import express from "express";
+import {
+  completePomodoro,
+  getPomodoroStats,
+  startPomodoro,
+} from "../controllers/pomodoro.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
-import { startPomodoro, completePomodoro, getPomodoroStats } from "../controllers/pomodoro.controller";
 import { validateStartPomodoro } from "../middleware/validation.middleware";
 
 const router = express.Router();

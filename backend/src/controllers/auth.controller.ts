@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/database";
-import { comparePassword, hashPassword } from "../utils/password.utils";
 import { generateToken } from "../utils/jwt.utils";
+import { comparePassword, hashPassword } from "../utils/password.utils";
 
 // POST /api/auth/register
 export const register = async (req: Request, res: Response) => {
@@ -12,7 +12,9 @@ export const register = async (req: Request, res: Response) => {
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (existingUser) {
-      return res.status(400).json({ message: "Registration failed. Please try again." });
+      return res
+        .status(400)
+        .json({ message: "Registration failed. Please try again." });
     }
 
     // Hash password

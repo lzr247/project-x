@@ -1,7 +1,15 @@
 import express from "express";
-import { getGoals, createGoal, updateGoal, deleteGoal } from "../controllers/goal.controller";
+import {
+  createGoal,
+  deleteGoal,
+  getGoals,
+  updateGoal,
+} from "../controllers/goal.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
-import { validateCreateGoal, validateUpdateGoal } from "../middleware/validation.middleware";
+import {
+  validateCreateGoal,
+  validateUpdateGoal,
+} from "../middleware/validation.middleware";
 
 const router = express.Router();
 
