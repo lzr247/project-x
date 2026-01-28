@@ -21,3 +21,31 @@ export interface RegisterCredentials {
   password: string;
   name?: string;
 }
+
+export interface Project {
+  id: string;
+  title: string;
+  description: string | null;
+  color: string;
+  isCompleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  _count?: {
+    goals: number;
+    completedGoals: number;
+  };
+}
+
+export interface CreateProjectRequest {
+  title: string;
+  description?: string;
+  color?: string;
+}
+
+export interface UpdateProjectRequest {
+  title?: string;
+  description?: string;
+  color?: string;
+  isCompleted?: boolean;
+}
