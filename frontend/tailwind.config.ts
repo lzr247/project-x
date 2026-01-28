@@ -5,39 +5,43 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {
-          100: "#e8ebf1",
-          200: "#c5ccd9",
-          300: "#a2adc2",
-          400: "#7f8eaa",
-          DEFAULT: "#576A8F",
-          500: "#576A8F",
-          600: "#465778",
-          700: "#364461",
-          800: "#26314a",
-          900: "#161e33",
+        // Sidebar & Primary elements
+        sidebar: {
+          DEFAULT: "#0f172a",
+          hover: "#1e293b",
+          border: "#1e293b",
+          text: "#94a3b8",
+          "text-active": "#f8fafc",
         },
-        secondary: {
-          100: "#eff0fe",
-          200: "#d5d9fb",
-          DEFAULT: "#B7BDF7",
-          300: "#B7BDF7",
-          400: "#9aa2f3",
-          500: "#7c86ef",
-        },
+        // Accent color
         accent: {
-          300: "#ffa888",
-          400: "#ff8d66",
-          DEFAULT: "#FF7444",
-          500: "#FF7444",
-          600: "#e55a2a",
-          700: "#cc4010",
+          DEFAULT: "#6366f1",
+          hover: "#4f46e5",
+          light: "#818cf8",
+          subtle: "#eef2ff",
         },
+        // Surface colors
         surface: {
-          DEFAULT: "#FFF8DE",
-          light: "#FFFCF0",
-          dark: "#f5edcc",
+          DEFAULT: "#f8fafc",
+          card: "#ffffff",
+          hover: "#f1f5f9",
         },
+        // Text colors
+        content: {
+          DEFAULT: "#1e293b",
+          secondary: "#64748b",
+          muted: "#94a3b8",
+        },
+        // Status colors
+        success: "#10b981",
+        warning: "#f59e0b",
+        danger: "#ef4444",
+      },
+      boxShadow: {
+        soft: "0 2px 8px -2px rgba(0, 0, 0, 0.05), 0 4px 16px -4px rgba(0, 0, 0, 0.1)",
+        card: "0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)",
+        "card-hover":
+          "0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 4px 12px -2px rgba(0, 0, 0, 0.05)",
       },
     },
   },
