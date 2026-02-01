@@ -91,7 +91,9 @@ const RegistrationPage = () => {
                 placeholder="John Doe"
               />
               {errors.name && (
-                <p className="mt-2 text-sm text-danger">{errors.name.message}</p>
+                <p className="mt-2 text-sm text-danger">
+                  {errors.name.message}
+                </p>
               )}
             </div>
 
@@ -114,7 +116,9 @@ const RegistrationPage = () => {
                 placeholder="you@example.com"
               />
               {errors.email && (
-                <p className="mt-2 text-sm text-danger">{errors.email.message}</p>
+                <p className="mt-2 text-sm text-danger">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -197,7 +201,10 @@ const RegistrationPage = () => {
 
           <p className="mt-8 text-center text-content-secondary">
             Already have an account?{" "}
-            <Link to="/login" className="text-accent font-medium hover:underline">
+            <Link
+              to="/login"
+              className="text-accent font-medium hover:underline"
+            >
               Sign in
             </Link>
           </p>
