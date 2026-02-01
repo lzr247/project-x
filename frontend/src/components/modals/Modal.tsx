@@ -59,7 +59,7 @@ const Modal = ({
 
       {/* Modal */}
       <div
-        className={`relative bg-white rounded-2xl shadow-xl w-full ${sizeClasses[size]} overflow-hidden`}
+        className={`relative w-full rounded-2xl bg-white shadow-xl ${sizeClasses[size]} overflow-hidden`}
       >
         {/* Optional color bar */}
         {colorBar && (
@@ -72,14 +72,14 @@ const Modal = ({
         <div className="p-6">
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between mb-6">
+            <div className="mb-6 flex items-center justify-between">
               {title && (
                 <h2 className="text-xl font-semibold text-content">{title}</h2>
               )}
               {showCloseButton && (
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-lg hover:bg-surface transition-colors ml-auto cursor-pointer"
+                  className="ml-auto cursor-pointer rounded-lg p-2 transition-colors hover:bg-surface"
                 >
                   <FontAwesomeIcon
                     icon={faTimes}

@@ -38,17 +38,17 @@ const Projects = () => {
     <div className="min-h-full">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold text-content">Projects</h1>
-            <p className="text-content-secondary mt-1">
+            <p className="mt-1 text-content-secondary">
               Manage your projects and goals
             </p>
           </div>
 
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="cursor-pointer inline-flex items-center gap-2 py-2.5 px-5 bg-accent hover:bg-accent-hover text-white font-medium rounded-xl transition-all duration-200 shadow-soft hover:shadow-md hover:-translate-y-0.5"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-5 py-2.5 font-medium text-white shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
           >
             <FontAwesomeIcon icon={faPlus} />
             New Project
@@ -65,7 +65,7 @@ const Projects = () => {
               placeholder="Search projects"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 bg-white border-gray-200 rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+              className="w-full rounded-xl border-gray-200 bg-white py-2.5 pl-11 pr-4 outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
             />
           </div>
         </div>
@@ -73,14 +73,14 @@ const Projects = () => {
 
       {/* Content */}
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {[...Array(8)].map((_, i) => (
             <ProjectCardSkeleton key={i} />
           ))}
         </div>
       ) : isError ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="w-16 h-16 bg-danger/10 rounded-full flex items-center justify-center mb-4">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-danger/10">
             <FontAwesomeIcon
               icon={faExclamationTriangle}
               className="text-2xl text-danger"
@@ -89,14 +89,14 @@ const Projects = () => {
           <p className="text-content-secondary">Failed to load projects</p>
         </div>
       ) : filteredProjects && filteredProjects.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredProjects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       ) : projects && projects.length > 0 ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="w-16 h-16 bg-surface rounded-full flex items-center justify-center mb-4">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface">
             <FontAwesomeIcon
               icon={faSearch}
               className="text-2xl text-content-muted"
@@ -108,21 +108,21 @@ const Projects = () => {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mb-6">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-accent/10">
             <FontAwesomeIcon
               icon={faFolderOpen}
               className="text-3xl text-accent"
             />
           </div>
-          <h3 className="text-lg font-semibold text-content mb-2">
+          <h3 className="mb-2 text-lg font-semibold text-content">
             No projects yet
           </h3>
-          <p className="text-content-secondary mb-6 text-center max-w-sm">
+          <p className="mb-6 max-w-sm text-center text-content-secondary">
             Create your first project and start organizing your goals
           </p>
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent hover:bg-accent-hover text-white font-medium rounded-xl transition-all duration-200"
+            className="inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 font-medium text-white transition-all duration-200 hover:bg-accent-hover"
           >
             <FontAwesomeIcon icon={faPlus} />
             Create First Project

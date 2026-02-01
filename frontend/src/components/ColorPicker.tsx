@@ -13,9 +13,9 @@ export const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
           key={color}
           type="button"
           onClick={() => onChange(color)}
-          className={`w-8 h-8 rounded-full transition-all duration-200 ${
+          className={`h-8 w-8 rounded-full transition-all duration-200 ${
             value === color
-              ? "ring-2 ring-offset-2 ring-content scale-110"
+              ? "scale-110 ring-2 ring-content ring-offset-2"
               : "hover:scale-110"
           }`}
           style={{ backgroundColor: color }}

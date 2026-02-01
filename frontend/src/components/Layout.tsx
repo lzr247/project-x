@@ -28,51 +28,44 @@ export const Layout = () => {
   return (
     <div className="flex min-h-screen bg-surface">
       {/* Mobile header */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-sidebar flex items-center justify-between px-4 lg:hidden z-20 shadow-soft">
+      <header className="fixed left-0 right-0 top-0 z-20 flex h-16 items-center justify-between bg-sidebar px-4 shadow-soft lg:hidden">
         <button
           onClick={() => setSidebarOpen(true)}
-          className="text-sidebar-text hover:text-white p-2 transition-colors"
+          className="p-2 text-sidebar-text transition-colors hover:text-white"
         >
           <FontAwesomeIcon icon={faBars} size="lg" />
         </button>
-        <span className="text-white text-lg font-semibold">Project X</span>
+        <span className="text-lg font-semibold text-white">Project X</span>
         <div className="w-8" />
       </header>
 
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden transition-opacity"
+          className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden"
           onClick={closeSidebar}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`
-          fixed lg:sticky top-0 left-0 h-screen bg-sidebar flex flex-col z-40
-          transition-all duration-300 ease-in-out
-          ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-          ${collapsed ? "lg:w-20" : "lg:w-64"}
-          w-64
-        `}
+        className={`fixed left-0 top-0 z-40 flex h-screen flex-col bg-sidebar transition-all duration-300 ease-in-out lg:sticky ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"} ${collapsed ? "lg:w-20" : "lg:w-64"} w-64`}
       >
         {/* Logo section */}
         <div
-          className={`h-16 flex items-center border-b border-sidebar-border ${collapsed ? "justify-center px-2" : "justify-between px-5"}`}
+          className={`flex h-16 items-center border-b border-sidebar-border ${collapsed ? "justify-center px-2" : "justify-between px-5"}`}
         >
           {!collapsed && (
-            <span className="text-white text-xl font-bold tracking-tight">
+            <span className="text-xl font-bold tracking-tight text-white">
               Project X
             </span>
           )}
-          {collapsed && <span className="text-white text-xl font-bold">X</span>}
+          {collapsed && <span className="text-xl font-bold text-white">X</span>}
 
           {/* Collapse button - desktop only */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg
-              text-sidebar-text hover:text-white hover:bg-sidebar-hover transition-all"
+            className="hidden h-8 w-8 items-center justify-center rounded-lg text-sidebar-text transition-all hover:bg-sidebar-hover hover:text-white lg:flex"
           >
             <FontAwesomeIcon
               icon={faChevronLeft}
@@ -83,14 +76,14 @@ export const Layout = () => {
           {/* Close button - mobile only */}
           <button
             onClick={closeSidebar}
-            className="lg:hidden text-sidebar-text hover:text-white p-2"
+            className="p-2 text-sidebar-text hover:text-white lg:hidden"
           >
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-6 px-3 overflow-y-auto">
+        <nav className="flex-1 overflow-y-auto px-3 py-6">
           <ul className="space-y-1">
             {navItems.map((item) => (
               <li key={item.path}>
@@ -99,12 +92,10 @@ export const Layout = () => {
                   end={item.path === "/"}
                   onClick={closeSidebar}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200
-                    ${collapsed ? "justify-center" : ""}
-                    ${
+                    `flex items-center gap-3 rounded-xl px-3 py-3 transition-all duration-200 ${collapsed ? "justify-center" : ""} ${
                       isActive
                         ? "bg-accent text-white shadow-soft"
-                        : "text-sidebar-text hover:text-white hover:bg-sidebar-hover"
+                        : "text-sidebar-text hover:bg-sidebar-hover hover:text-white"
                     }`
                   }
                   title={collapsed ? item.label : undefined}
@@ -126,21 +117,18 @@ export const Layout = () => {
         <div className="border-t border-sidebar-border p-3">
           {/* User info */}
           {!collapsed && user && (
-            <div className="px-3 py-2 mb-2">
-              <p className="text-sm font-medium text-white truncate">
+            <div className="mb-2 px-3 py-2">
+              <p className="truncate text-sm font-medium text-white">
                 {user.name || user.email}
               </p>
-              <p className="text-xs text-sidebar-text truncate">{user.email}</p>
+              <p className="truncate text-xs text-sidebar-text">{user.email}</p>
             </div>
           )}
 
           {/* Logout button */}
           <button
             onClick={logout}
-            className={`flex items-center gap-3 px-3 py-3 w-full rounded-xl
-              text-sidebar-text hover:text-white hover:bg-sidebar-hover
-              transition-all duration-200
-              ${collapsed ? "justify-center" : ""}`}
+            className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sidebar-text transition-all duration-200 hover:bg-sidebar-hover hover:text-white ${collapsed ? "justify-center" : ""}`}
             title={collapsed ? "Logout" : undefined}
           >
             <FontAwesomeIcon icon={faRightFromBracket} />
@@ -150,7 +138,7 @@ export const Layout = () => {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 min-h-screen">
+      <main className="min-h-screen flex-1">
         {/* Top spacing for mobile header */}
         <div className="h-16 lg:hidden" />
 

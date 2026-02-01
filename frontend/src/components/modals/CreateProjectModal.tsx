@@ -60,8 +60,8 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Title input */}
         <div>
-          <label className="block text-sm font-medium text-content mb-2">
-            Project name <span className="text-danger text-xs">*</span>
+          <label className="mb-2 block text-sm font-medium text-content">
+            Project name <span className="text-xs text-danger">*</span>
           </label>
           <input
             {...register("title", {
@@ -71,7 +71,7 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
             })}
             type="text"
             placeholder="Enter project name"
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+            className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
           {errors.title && (
             <p className="mt-1 text-sm text-danger">{errors.title.message}</p>
@@ -80,7 +80,7 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-content mb-2">
+          <label className="mb-2 block text-sm font-medium text-content">
             Description
           </label>
           <textarea
@@ -89,7 +89,7 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
             })}
             rows={3}
             placeholder="Brief project description (optional)"
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all resize-none"
+            className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
           {errors.description && (
             <p className="mt-1 text-sm text-danger">
@@ -100,7 +100,7 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
 
         {/* Color picker */}
         <div>
-          <label className="block text-sm font-medium text-content mb-3">
+          <label className="mb-3 block text-sm font-medium text-content">
             Project Color
           </label>
           <ColorPicker
@@ -113,7 +113,7 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
         <button
           type="submit"
           disabled={mutation.isPending}
-          className="cursor-pointer w-full py-3 px-4 bg-accent hover:bg-accent-hover text-white font-medium rounded-xl transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-soft hover:shadow-md"
+          className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 font-medium text-white shadow-soft transition-all duration-200 hover:bg-accent-hover hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
         >
           {mutation.isPending ? (
             <>

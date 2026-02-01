@@ -17,18 +17,18 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   const progress = totalGoals > 0 ? (completedGoals / totalGoals) * 100 : 0;
 
   return (
-    <div className="group relative bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200 flex flex-col h-full">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-card transition-all duration-300 hover:border-gray-200 hover:shadow-card-hover">
       {/* Color bar */}
       <div
-        className="h-1.5 transition-all duration-300 group-hover:h-2 shrink-0"
+        className="h-1.5 shrink-0 transition-all duration-300 group-hover:h-2"
         style={{ backgroundColor: project.color }}
       />
 
-      <div className="p-5 flex flex-col flex-1">
+      <div className="flex flex-1 flex-col p-5">
         {/* Header */}
-        <div className="flex items-start justify-between mb-3">
+        <div className="mb-3 flex items-start justify-between">
           <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+            className="flex h-10 w-10 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
             style={{ backgroundColor: `${project.color}15` }}
           >
             <FontAwesomeIcon
@@ -38,7 +38,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             />
           </div>
           <div>
-            <h3 className="font-semibold text-content group-hovere:text-accent transition-colors">
+            <h3 className="group-hovere:text-accent font-semibold text-content transition-colors">
               {project.title}
             </h3>
             {project.isCompleted && (
@@ -49,7 +49,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           </div>
 
           {/* Menu button */}
-          <button className="cursor-pointer p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-surface transition-all">
+          <button className="cursor-pointer rounded-lg p-2 opacity-0 transition-all hover:bg-surface group-hover:opacity-100">
             <FontAwesomeIcon
               icon={faEllipsisV}
               className="text-content-muted"
@@ -58,8 +58,8 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         </div>
 
         {/* Description  */}
-        <div className="flex-1 min-h-10 mb-4">
-          <p className="text-sm text-content-secondary line-clamp-2">
+        <div className="mb-4 min-h-10 flex-1">
+          <p className="line-clamp-2 text-sm text-content-secondary">
             {project.description || <i>No description</i>}
           </p>
         </div>
@@ -68,8 +68,8 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         <div className="mt-auto">
           {totalGoals > 0 && (
             <div className="mt-4">
-              <div className="flex items-center justify-between text-xs mb-2">
-                <span className="text-content-secondary flex items-center gap-1">
+              <div className="mb-2 flex items-center justify-between text-xs">
+                <span className="flex items-center gap-1 text-content-secondary">
                   <FontAwesomeIcon
                     icon={faBullseye}
                     className="text-content-muted"
@@ -80,7 +80,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                   {completedGoals}/{totalGoals}
                 </span>
               </div>
-              <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{
@@ -95,8 +95,8 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
         {/* Empty state for goals */}
         {totalGoals === 0 && (
-          <div className="mt-4 py-2 px-3 bg-surface rounded-lg">
-            <p className="text-xs text-content-muted text-center">
+          <div className="mt-4 rounded-lg bg-surface px-3 py-2">
+            <p className="text-center text-xs text-content-muted">
               No goals defined
             </p>
           </div>

@@ -40,30 +40,30 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="bg-linear-to-br flex min-h-screen items-center justify-center from-slate-900 via-slate-800 to-slate-900 p-4">
       {/* Decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-accent/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-40 -top-40 h-80 w-80 rounded-full bg-accent/20 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
       </div>
 
-      <div className="w-full max-w-md relative">
+      <div className="relative w-full max-w-md">
         {/* Card */}
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-soft p-8">
+        <div className="rounded-2xl bg-white/95 p-8 shadow-soft backdrop-blur-sm">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-2xl mb-4">
+          <div className="mb-8 text-center">
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10">
               <span className="text-2xl font-bold text-accent">X</span>
             </div>
             <h1 className="text-2xl font-bold text-content">Welcome back</h1>
-            <p className="text-content-secondary mt-2">
+            <p className="mt-2 text-content-secondary">
               Sign in to continue to Project X
             </p>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="mb-6 p-4 bg-danger/10 border border-danger/20 text-danger rounded-xl text-sm">
+            <div className="mb-6 rounded-xl border border-danger/20 bg-danger/10 p-4 text-sm text-danger">
               {error}
             </div>
           )}
@@ -71,7 +71,7 @@ const LoginPage = () => {
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-content mb-2">
+              <label className="mb-2 block text-sm font-medium text-content">
                 Email
               </label>
               <input
@@ -83,13 +83,11 @@ const LoginPage = () => {
                     message: "Invalid email address",
                   },
                 })}
-                className={`w-full px-4 py-3 rounded-xl border-2 bg-surface transition-all
-                  focus:outline-none focus:ring-0
-                  ${
-                    errors.email
-                      ? "border-danger focus:border-danger"
-                      : "border-transparent focus:border-accent"
-                  }`}
+                className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${
+                  errors.email
+                    ? "border-danger focus:border-danger"
+                    : "border-transparent focus:border-accent"
+                }`}
                 placeholder="you@example.com"
               />
               {errors.email && (
@@ -100,7 +98,7 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-content mb-2">
+              <label className="mb-2 block text-sm font-medium text-content">
                 Password
               </label>
               <input
@@ -112,13 +110,11 @@ const LoginPage = () => {
                     message: "Password must be at least 6 characters",
                   },
                 })}
-                className={`w-full px-4 py-3 rounded-xl border-2 bg-surface transition-all
-                  focus:outline-none focus:ring-0
-                  ${
-                    errors.password
-                      ? "border-danger focus:border-danger"
-                      : "border-transparent focus:border-accent"
-                  }`}
+                className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${
+                  errors.password
+                    ? "border-danger focus:border-danger"
+                    : "border-transparent focus:border-accent"
+                }`}
                 placeholder="••••••••"
               />
               {errors.password && (
@@ -131,14 +127,11 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 bg-accent text-white font-semibold rounded-xl
-                hover:bg-accent-hover active:scale-[0.98] transition-all duration-200
-                disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100
-                shadow-soft hover:shadow-card-hover"
+              className="w-full rounded-xl bg-accent py-3.5 font-semibold text-white shadow-soft transition-all duration-200 hover:bg-accent-hover hover:shadow-card-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
             >
               {isLoading ? (
                 <span className="inline-flex items-center gap-2">
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
                     <circle
                       className="opacity-25"
                       cx="12"
@@ -167,7 +160,7 @@ const LoginPage = () => {
             Don't have an account?{" "}
             <Link
               to="/registration"
-              className="text-accent font-medium hover:underline"
+              className="font-medium text-accent hover:underline"
             >
               Create one
             </Link>

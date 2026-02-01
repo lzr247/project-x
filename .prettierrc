@@ -11,8 +11,8 @@
   "endOfLine": "crlf",
   "jsxSingleQuote": false,
   "plugins": [
-    "prettier-plugin-tailwindcss",
-    "prettier-plugin-classnames",
-    "prettier-plugin-organize-imports"
-  ]
+    "prettier-plugin-organize-imports",
+    "prettier-plugin-tailwindcss"
+  ],
+  "tailwindConfig": "./frontend/tailwind.config.ts"
 }

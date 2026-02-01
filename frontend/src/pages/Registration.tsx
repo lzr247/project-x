@@ -51,43 +51,41 @@ const RegistrationPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="bg-linear-to-br flex min-h-screen items-center justify-center from-slate-900 via-slate-800 to-slate-900 p-4">
       {/* Decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-accent/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-40 -top-40 h-80 w-80 rounded-full bg-accent/20 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
       </div>
 
-      <div className="w-full max-w-md relative">
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-soft p-8">
+      <div className="relative w-full max-w-md">
+        <div className="rounded-2xl bg-white/95 p-8 shadow-soft backdrop-blur-sm">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-2xl mb-4">
+          <div className="mb-8 text-center">
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10">
               <span className="text-2xl font-bold text-accent">X</span>
             </div>
             <h1 className="text-2xl font-bold text-content">Create account</h1>
-            <p className="text-content-secondary mt-2">
+            <p className="mt-2 text-content-secondary">
               Start your productivity journey
             </p>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-danger/10 border border-danger/20 text-danger rounded-xl text-sm">
+            <div className="mb-6 rounded-xl border border-danger/20 bg-danger/10 p-4 text-sm text-danger">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-content mb-2">
+              <label className="mb-2 block text-sm font-medium text-content">
                 Name
               </label>
               <input
                 type="text"
                 {...register("name", { required: "Name is required" })}
-                className={`w-full px-4 py-3 rounded-xl border-2 bg-surface transition-all
-                  focus:outline-none focus:ring-0
-                  ${errors.name ? "border-danger" : "border-transparent focus:border-accent"}`}
+                className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${errors.name ? "border-danger" : "border-transparent focus:border-accent"}`}
                 placeholder="John Doe"
               />
               {errors.name && (
@@ -98,7 +96,7 @@ const RegistrationPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-content mb-2">
+              <label className="mb-2 block text-sm font-medium text-content">
                 Email
               </label>
               <input
@@ -110,9 +108,7 @@ const RegistrationPage = () => {
                     message: "Invalid email",
                   },
                 })}
-                className={`w-full px-4 py-3 rounded-xl border-2 bg-surface transition-all
-                  focus:outline-none focus:ring-0
-                  ${errors.email ? "border-danger" : "border-transparent focus:border-accent"}`}
+                className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${errors.email ? "border-danger" : "border-transparent focus:border-accent"}`}
                 placeholder="you@example.com"
               />
               {errors.email && (
@@ -123,7 +119,7 @@ const RegistrationPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-content mb-2">
+              <label className="mb-2 block text-sm font-medium text-content">
                 Password
               </label>
               <input
@@ -132,9 +128,7 @@ const RegistrationPage = () => {
                   required: "Password is required",
                   minLength: { value: 6, message: "Min 6 characters" },
                 })}
-                className={`w-full px-4 py-3 rounded-xl border-2 bg-surface transition-all
-                  focus:outline-none focus:ring-0
-                  ${errors.password ? "border-danger" : "border-transparent focus:border-accent"}`}
+                className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${errors.password ? "border-danger" : "border-transparent focus:border-accent"}`}
                 placeholder="••••••••"
               />
               {errors.password && (
@@ -145,7 +139,7 @@ const RegistrationPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-content mb-2">
+              <label className="mb-2 block text-sm font-medium text-content">
                 Confirm Password
               </label>
               <input
@@ -154,9 +148,7 @@ const RegistrationPage = () => {
                   required: "Please confirm password",
                   validate: (v) => v === password || "Passwords don't match",
                 })}
-                className={`w-full px-4 py-3 rounded-xl border-2 bg-surface transition-all
-                  focus:outline-none focus:ring-0
-                  ${errors.confirmPassword ? "border-danger" : "border-transparent focus:border-accent"}`}
+                className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${errors.confirmPassword ? "border-danger" : "border-transparent focus:border-accent"}`}
                 placeholder="••••••••"
               />
               {errors.confirmPassword && (
@@ -169,13 +161,11 @@ const RegistrationPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 bg-accent text-white font-semibold rounded-xl
-                hover:bg-accent-hover active:scale-[0.98] transition-all duration-200
-                disabled:opacity-50 disabled:cursor-not-allowed shadow-soft hover:shadow-card-hover mt-2"
+              className="mt-2 w-full rounded-xl bg-accent py-3.5 font-semibold text-white shadow-soft transition-all duration-200 hover:bg-accent-hover hover:shadow-card-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoading ? (
                 <span className="inline-flex items-center gap-2">
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
                     <circle
                       className="opacity-25"
                       cx="12"
@@ -203,7 +193,7 @@ const RegistrationPage = () => {
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-accent font-medium hover:underline"
+              className="font-medium text-accent hover:underline"
             >
               Sign in
             </Link>
