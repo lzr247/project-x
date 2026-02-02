@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Project } from "../../types";
+import { Link } from "react-router-dom";
 
 interface ProjectCardProps {
   project: Project;
@@ -17,7 +18,10 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   const progress = totalGoals > 0 ? (completedGoals / totalGoals) * 100 : 0;
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-card transition-all duration-300 hover:border-gray-200 hover:shadow-card-hover">
+    <Link
+      to={`/project/${project.id}`}
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-card transition-all duration-300 hover:border-gray-200 hover:shadow-card-hover"
+    >
       {/* Color bar */}
       <div
         className="h-1.5 shrink-0 transition-all duration-300 group-hover:h-2"
@@ -102,7 +106,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 };
 

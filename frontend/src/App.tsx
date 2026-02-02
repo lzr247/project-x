@@ -8,6 +8,7 @@ import LoginPage from "./pages/Login";
 import Pomodoro from "./pages/Pomodoro";
 import Projects from "./pages/Projects";
 import RegistrationPage from "./pages/Registration";
+import ProjectDetails from "./pages/ProjectDetails";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
             <Route element={<Layout />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/projects" element={<Projects />} />
+              <Route path="/project/:id" element={<ProjectDetails />} />
               <Route path="/pomodoro" element={<Pomodoro />} />
             </Route>
           </Route>

@@ -27,12 +27,10 @@ const Projects = () => {
 
   const filteredProjects =
     searchQuery !== ""
-      ? projects?.filter((project) => {
-          project.title.toLowerCase().includes(searchQuery.toLowerCase());
-        })
+      ? projects?.filter((project) =>
+          project.title.toLowerCase().includes(searchQuery.toLowerCase())
+        )
       : projects;
-
-  console.log(projects);
 
   return (
     <div className="min-h-full">

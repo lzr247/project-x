@@ -49,3 +49,28 @@ export interface UpdateProjectRequest {
   color?: string;
   isCompleted?: boolean;
 }
+
+export interface Goal {
+  id: string;
+  title: string;
+  description: string | null;
+  isCompleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  projectId: string;
+}
+
+export interface ProjectWithGoals extends Project {
+  goals: Goal[];
+}
+
+export interface CreateGoalRequest {
+  title: string;
+  description?: string;
+}
+
+export interface UpdateGoalRequest {
+  title?: string;
+  description?: string;
+  isCompleted?: boolean;
+}
