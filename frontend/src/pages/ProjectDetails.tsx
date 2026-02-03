@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
-import { deleteGoal, getProjectById, updateGoal } from "../api/projects.api";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { deleteGoal, deleteProject, getProjectById, updateGoal } from "../api/projects.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
@@ -14,11 +14,15 @@ import { useState } from "react";
 import AddGoalModal from "../components/modals/AddGoalModal";
 import toast from "react-hot-toast";
 import type { Goal } from "../types";
+import ConfirmModal from "../components/modals/ConfirmModal";
 
 const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [isAddGoalModalOpen, setIsAddGoalModalOpen] = useState(false);
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
+  const [goalToDelete, setGoalToDelete] = useState<Goal | null>(null);
 
   const {
     data: project,
@@ -46,9 +50,19 @@ const ProjectDetails = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", id] });
       toast.success("Goal deleted");
+      setGoalToDelete(null);
     },
     onError: () => {
       toast.error("Failed to delete goal");
+    },
+  });
+
+  const deleteProjectMutation = useMutation({
+    mutationFn: deleteProject,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      toast.success("Project deleted");
+      navigate("/projects");
     },
   });
 
@@ -56,10 +70,14 @@ const ProjectDetails = () => {
     toggleGoalMutation.mutate({ goalId: goal.id, isCompleted: !goal.isCompleted });
   };
 
-  const handleDeleteGoal = (goalId: string) => {
-    if (confirm("Are you sure you want to delete this goal?")) {
-      deleteGoalMutation.mutate(goalId);
+  const handleDeleteGoal = () => {
+    if (goalToDelete) {
+      deleteGoalMutation.mutate(goalToDelete.id);
     }
+  };
+
+  const handleDeleteProject = () => {
+    deleteProjectMutation.mutate(id!);
   };
 
   if (isLoading) {
@@ -129,6 +147,15 @@ const ProjectDetails = () => {
                 {project.description && <p className="mt-1 text-content-secondary">{project.description}</p>}
               </div>
             </div>
+
+            {/* Delete project button */}
+            <button
+              onClick={() => setIsDeleteProjectModalOpen(true)}
+              className="cursor-pointer rounded-xl border border-danger/20 bg-danger/5 px-4 py-2 text-sm font-medium text-danger transition-all hover:bg-danger/10 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <FontAwesomeIcon icon={faTrash} className="mr-2" />
+              Delete Project
+            </button>
           </div>
 
           {/* Progress bar */}
@@ -221,8 +248,7 @@ const ProjectDetails = () => {
 
               {/* Delete button */}
               <button
-                onClick={() => handleDeleteGoal(goal.id)}
-                disabled={deleteGoalMutation.isPending}
+                onClick={() => setGoalToDelete(goal)}
                 className="cursor-pointer rounded-lg p-2 text-content-muted opacity-0 transition-all hover:bg-danger/10 hover:text-danger group-hover:opacity-100"
               >
                 <FontAwesomeIcon icon={faTrash} />
@@ -238,6 +264,32 @@ const ProjectDetails = () => {
         onClose={() => setIsAddGoalModalOpen(false)}
         projectId={id!}
         projectColor={project.color}
+      />
+
+      {/* Delete Project Confirmation Modal */}
+      <ConfirmModal
+        isOpen={isDeleteProjectModalOpen}
+        onClose={() => setIsDeleteProjectModalOpen(false)}
+        onConfirm={handleDeleteProject}
+        title="Delete Project"
+        message="Are you sure you want to delete this project? All goals will be permanently deleted as well."
+        confirmText="Delete"
+        icon={faTrash}
+        variant="danger"
+        isLoading={deleteProjectMutation.isPending}
+      />
+
+      {/* Delete Goal Confirmation Modal */}
+      <ConfirmModal
+        isOpen={!!goalToDelete}
+        onClose={() => setGoalToDelete(null)}
+        onConfirm={handleDeleteGoal}
+        title="Delete Goal"
+        message={`Are you sure you want to delete "${goalToDelete?.title}"?`}
+        confirmText="Delete"
+        icon={faTrash}
+        variant="danger"
+        isLoading={deleteGoalMutation.isPending}
       />
     </div>
   );
