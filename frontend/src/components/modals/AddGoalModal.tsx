@@ -32,6 +32,7 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
     mutationFn: (data: CreateGoalRequest) => createGoal(projectId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success("Goal added successfully!");
       reset();
       onClose();

@@ -1,9 +1,4 @@
-import {
-  faBullseye,
-  faCheckCircle,
-  faEllipsisV,
-  faFolder,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBullseye, faCheckCircle, faEllipsisV, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Project } from "../../types";
 import { Link } from "react-router-dom";
@@ -24,7 +19,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
     >
       {/* Color bar */}
       <div
-        className="h-1.5 shrink-0 transition-all duration-300 group-hover:h-2"
+        className="h-1.5 shrink-0 transition-all duration-300 group-hover:scale-y-[1.6]"
         style={{ backgroundColor: project.color }}
       />
 
@@ -35,16 +30,10 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             className="flex h-10 w-10 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
             style={{ backgroundColor: `${project.color}15` }}
           >
-            <FontAwesomeIcon
-              icon={faFolder}
-              className="text-lg"
-              style={{ color: project.color }}
-            />
+            <FontAwesomeIcon icon={faFolder} className="text-lg" style={{ color: project.color }} />
           </div>
           <div>
-            <h3 className="group-hovere:text-accent font-semibold text-content transition-colors">
-              {project.title}
-            </h3>
+            <h3 className="group-hovere:text-accent font-semibold text-content transition-colors">{project.title}</h3>
             {project.isCompleted && (
               <span className="inline-flex items-center gap-1 text-xs text-success">
                 <FontAwesomeIcon icon={faCheckCircle} />
@@ -54,18 +43,13 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
           {/* Menu button */}
           <button className="cursor-pointer rounded-lg p-2 opacity-0 transition-all hover:bg-surface group-hover:opacity-100">
-            <FontAwesomeIcon
-              icon={faEllipsisV}
-              className="text-content-muted"
-            />
+            <FontAwesomeIcon icon={faEllipsisV} className="text-content-muted" />
           </button>
         </div>
 
         {/* Description  */}
         <div className="mb-4 min-h-10 flex-1">
-          <p className="line-clamp-2 text-sm text-content-secondary">
-            {project.description || <i>No description</i>}
-          </p>
+          <p className="line-clamp-2 text-sm text-content-secondary">{project.description || <i>No description</i>}</p>
         </div>
 
         {/* Goals progress */}
@@ -74,10 +58,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             <div className="mt-4">
               <div className="mb-2 flex items-center justify-between text-xs">
                 <span className="flex items-center gap-1 text-content-secondary">
-                  <FontAwesomeIcon
-                    icon={faBullseye}
-                    className="text-content-muted"
-                  />
+                  <FontAwesomeIcon icon={faBullseye} className="text-content-muted" />
                   Goals
                 </span>
                 <span className="font-medium text-content">
@@ -99,10 +80,15 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
         {/* Empty state for goals */}
         {totalGoals === 0 && (
-          <div className="mt-4 rounded-lg bg-surface px-3 py-2">
-            <p className="text-center text-xs text-content-muted">
-              No goals defined
-            </p>
+          <div className="mt-4">
+            <div className="mb-2 flex items-center justify-between text-xs">
+              <span className="flex items-center gap-1 text-content-secondary">
+                <FontAwesomeIcon icon={faBullseye} className="text-content-muted" />
+                Goals
+              </span>
+              <span className="font-medium text-content-muted">0/0</span>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-gray-100" />
           </div>
         )}
       </div>

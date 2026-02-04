@@ -39,6 +39,7 @@ const ProjectDetails = () => {
       updateGoal(goalId, { isCompleted }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", id] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
     },
     onError: () => {
       toast.error("Failed to update goal");
@@ -49,6 +50,7 @@ const ProjectDetails = () => {
     mutationFn: deleteGoal,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", id] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success("Goal deleted");
       setGoalToDelete(null);
     },

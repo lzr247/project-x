@@ -8,13 +8,34 @@ export const getProjects = async (req: Request, res: Response) => {
 
     const projects = await prisma.project.findMany({
       where: { userId },
-      include: { goals: true },
+      include: {
+        _count: {
+          select: { goals: true },
+        },
+      },
       orderBy: { createdAt: "desc" },
     });
 
+    // Add completedGoals count
+    const projectsWithCounts = await Promise.all(
+      projects.map(async (project) => {
+        const completedGoals = await prisma.goal.count({
+          where: { projectId: project.id, isCompleted: true },
+        });
+
+        return {
+          ...project,
+          _count: {
+            goals: project._count.goals,
+            completedGoals,
+          },
+        };
+      })
+    );
+
     return res.status(200).json({
       success: true,
-      data: projects,
+      data: projectsWithCounts,
     });
   } catch (error) {
     return res.status(500).json({
@@ -36,9 +57,7 @@ export const getProjectById = async (req: Request, res: Response) => {
     });
 
     if (!project) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Project not found." });
+      return res.status(404).json({ success: false, message: "Project not found." });
     }
 
     return res.status(200).json({
