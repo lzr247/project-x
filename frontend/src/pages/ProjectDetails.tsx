@@ -1,7 +1,3 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { deleteGoal, deleteProject, getProjectById, updateGoal } from "../api/projects.api";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faBullseye,
@@ -10,11 +6,15 @@ import {
   faPlus,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import AddGoalModal from "../components/modals/AddGoalModal";
 import toast from "react-hot-toast";
-import type { Goal } from "../types";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { deleteGoal, deleteProject, getProjectById, updateGoal } from "../api/projects.api";
+import AddGoalModal from "../components/modals/AddGoalModal";
 import ConfirmModal from "../components/modals/ConfirmModal";
+import type { Goal } from "../types";
 
 const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();

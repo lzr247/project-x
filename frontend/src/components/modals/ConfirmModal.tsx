@@ -1,6 +1,6 @@
+import type { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import Modal from "./Modal";
 
 interface ConfirmModalProps {

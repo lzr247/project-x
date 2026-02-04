@@ -1,13 +1,7 @@
-import type {
-  AuthResponse,
-  LoginCredentials,
-  RegisterCredentials,
-} from "../types";
+import type { AuthResponse, LoginCredentials, RegisterCredentials } from "../types";
 import api from "./axios.config";
 
-export const register = async (
-  body: RegisterCredentials
-): Promise<AuthResponse> => {
+export const register = async (body: RegisterCredentials): Promise<AuthResponse> => {
   const { data } = await api.post("/auth/register", body);
   return {
     user: data.user,

@@ -6,9 +6,9 @@ import { Layout } from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import LoginPage from "./pages/Login";
 import Pomodoro from "./pages/Pomodoro";
+import ProjectDetails from "./pages/ProjectDetails";
 import Projects from "./pages/Projects";
 import RegistrationPage from "./pages/Registration";
-import ProjectDetails from "./pages/ProjectDetails";
 
 const App = () => {
   return (

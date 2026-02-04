@@ -55,11 +55,7 @@ export const Layout = () => {
         <div
           className={`flex h-16 items-center border-b border-sidebar-border ${collapsed ? "justify-center px-2" : "justify-between px-5"}`}
         >
-          {!collapsed && (
-            <span className="text-xl font-bold tracking-tight text-white">
-              Project X
-            </span>
-          )}
+          {!collapsed && <span className="text-xl font-bold tracking-tight text-white">Project X</span>}
           {collapsed && <span className="text-xl font-bold text-white">X</span>}
 
           {/* Collapse button - desktop only */}
@@ -74,10 +70,7 @@ export const Layout = () => {
           </button>
 
           {/* Close button - mobile only */}
-          <button
-            onClick={closeSidebar}
-            className="p-2 text-sidebar-text hover:text-white lg:hidden"
-          >
+          <button onClick={closeSidebar} className="p-2 text-sidebar-text hover:text-white lg:hidden">
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
         </div>
@@ -100,13 +93,8 @@ export const Layout = () => {
                   }
                   title={collapsed ? item.label : undefined}
                 >
-                  <FontAwesomeIcon
-                    icon={item.icon}
-                    className={collapsed ? "text-lg" : ""}
-                  />
-                  {!collapsed && (
-                    <span className="font-medium">{item.label}</span>
-                  )}
+                  <FontAwesomeIcon icon={item.icon} className={collapsed ? "text-lg" : ""} />
+                  {!collapsed && <span className="font-medium">{item.label}</span>}
                 </NavLink>
               </li>
             ))}
@@ -118,9 +106,7 @@ export const Layout = () => {
           {/* User info */}
           {!collapsed && user && (
             <div className="mb-2 px-3 py-2">
-              <p className="truncate text-sm font-medium text-white">
-                {user.name || user.email}
-              </p>
+              <p className="truncate text-sm font-medium text-white">{user.name || user.email}</p>
               <p className="truncate text-xs text-sidebar-text">{user.email}</p>
             </div>
           )}

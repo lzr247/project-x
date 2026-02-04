@@ -1,9 +1,4 @@
-import {
-  faExclamationTriangle,
-  faFolderOpen,
-  faPlus,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+import { faExclamationTriangle, faFolderOpen, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -27,9 +22,7 @@ const Projects = () => {
 
   const filteredProjects =
     searchQuery !== ""
-      ? projects?.filter((project) =>
-          project.title.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+      ? projects?.filter((project) => project.title.toLowerCase().includes(searchQuery.toLowerCase()))
       : projects;
 
   return (
@@ -39,9 +32,7 @@ const Projects = () => {
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold text-content">Projects</h1>
-            <p className="mt-1 text-content-secondary">
-              Manage your projects and goals
-            </p>
+            <p className="mt-1 text-content-secondary">Manage your projects and goals</p>
           </div>
 
           <button
@@ -54,10 +45,7 @@ const Projects = () => {
 
           {/* Search bar */}
           <div className="relative max-w-md">
-            <FontAwesomeIcon
-              icon={faSearch}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted"
-            />
+            <FontAwesomeIcon icon={faSearch} className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted" />
             <input
               type="text"
               placeholder="Search projects"
@@ -79,10 +67,7 @@ const Projects = () => {
       ) : isError ? (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-danger/10">
-            <FontAwesomeIcon
-              icon={faExclamationTriangle}
-              className="text-2xl text-danger"
-            />
+            <FontAwesomeIcon icon={faExclamationTriangle} className="text-2xl text-danger" />
           </div>
           <p className="text-content-secondary">Failed to load projects</p>
         </div>
@@ -95,26 +80,16 @@ const Projects = () => {
       ) : projects && projects.length > 0 ? (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface">
-            <FontAwesomeIcon
-              icon={faSearch}
-              className="text-2xl text-content-muted"
-            />
+            <FontAwesomeIcon icon={faSearch} className="text-2xl text-content-muted" />
           </div>
-          <p className="text-content-secondary">
-            No results for "{searchQuery}"
-          </p>
+          <p className="text-content-secondary">No results for "{searchQuery}"</p>
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-accent/10">
-            <FontAwesomeIcon
-              icon={faFolderOpen}
-              className="text-3xl text-accent"
-            />
+            <FontAwesomeIcon icon={faFolderOpen} className="text-3xl text-accent" />
           </div>
-          <h3 className="mb-2 text-lg font-semibold text-content">
-            No projects yet
-          </h3>
+          <h3 className="mb-2 text-lg font-semibold text-content">No projects yet</h3>
           <p className="mb-6 max-w-sm text-center text-content-secondary">
             Create your first project and start organizing your goals
           </p>
@@ -129,10 +104,7 @@ const Projects = () => {
       )}
 
       {/* Create modal */}
-      <CreateProjectModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-      />
+      <CreateProjectModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
     </div>
   );
 };

@@ -50,13 +50,7 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="New project"
-      size="md"
-      colorBar={selectedColor}
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title="New project" size="md" colorBar={selectedColor}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Title input */}
         <div>
@@ -73,16 +67,12 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
             placeholder="Enter project name"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
-          {errors.title && (
-            <p className="mt-1 text-sm text-danger">{errors.title.message}</p>
-          )}
+          {errors.title && <p className="mt-1 text-sm text-danger">{errors.title.message}</p>}
         </div>
 
         {/* Description */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-content">
-            Description
-          </label>
+          <label className="mb-2 block text-sm font-medium text-content">Description</label>
           <textarea
             {...register("description", {
               maxLength: { value: 500, message: "Maximum 500 characters" },
@@ -91,22 +81,13 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
             placeholder="Brief project description (optional)"
             className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
-          {errors.description && (
-            <p className="mt-1 text-sm text-danger">
-              {errors.description.message}
-            </p>
-          )}
+          {errors.description && <p className="mt-1 text-sm text-danger">{errors.description.message}</p>}
         </div>
 
         {/* Color picker */}
         <div>
-          <label className="mb-3 block text-sm font-medium text-content">
-            Project Color
-          </label>
-          <ColorPicker
-            value={selectedColor || "#6366F1"}
-            onChange={(color) => setValue("color", color)}
-          />
+          <label className="mb-3 block text-sm font-medium text-content">Project Color</label>
+          <ColorPicker value={selectedColor || "#6366F1"} onChange={(color) => setValue("color", color)} />
         </div>
 
         {/* Submit button */}
@@ -117,8 +98,7 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
         >
           {mutation.isPending ? (
             <>
-              <FontAwesomeIcon icon={faSpinner} className="animate-spin" />{" "}
-              Creating...
+              <FontAwesomeIcon icon={faSpinner} className="animate-spin" /> Creating...
             </>
           ) : (
             <>

@@ -2,11 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 
 // Check result of validation
-export const handleValidationErrors = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -22,27 +18,15 @@ export const handleValidationErrors = (
 
 // Register validation
 export const validateRegister = [
-  body("email")
-    .isEmail()
-    .withMessage("Please provide a valid email")
-    .normalizeEmail(),
-  body("password")
-    .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters."),
-  body("name")
-    .optional()
-    .trim()
-    .isLength({ min: 2 })
-    .withMessage("Name must be at least 2 characters"),
+  body("email").isEmail().withMessage("Please provide a valid email").normalizeEmail(),
+  body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters."),
+  body("name").optional().trim().isLength({ min: 2 }).withMessage("Name must be at least 2 characters"),
   handleValidationErrors,
 ];
 
 // Login validation
 export const validateLogin = [
-  body("email")
-    .isEmail()
-    .withMessage("Please provide a valid email")
-    .normalizeEmail(),
+  body("email").isEmail().withMessage("Please provide a valid email").normalizeEmail(),
   body("password").notEmpty().withMessage("Password is required"),
   handleValidationErrors,
 ];
@@ -83,10 +67,7 @@ export const validateUpdateProject = [
     .optional()
     .matches(/^#[0-9A-Fa-f]{6}$/)
     .withMessage("Color must be a valid hex code (e.g., #3B82F6)"),
-  body("isCompleted")
-    .optional()
-    .isBoolean()
-    .withMessage("isCompleted must be a boolean"),
+  body("isCompleted").optional().isBoolean().withMessage("isCompleted must be a boolean"),
   handleValidationErrors,
 ];
 
@@ -118,22 +99,13 @@ export const validateUpdateGoal = [
     .trim()
     .isLength({ max: 500 })
     .withMessage("Description must be less than 500 characters"),
-  body("isCompleted")
-    .optional()
-    .isBoolean()
-    .withMessage("isCompleted must be a boolean"),
+  body("isCompleted").optional().isBoolean().withMessage("isCompleted must be a boolean"),
   handleValidationErrors,
 ];
 
 // Pomodoro start validation
 export const validateStartPomodoro = [
-  body("duration")
-    .optional()
-    .isInt({ min: 1, max: 120 })
-    .withMessage("Duration must be between 1 and 120 minutes"),
-  body("projectId")
-    .optional()
-    .isString()
-    .withMessage("Project ID must be a string"),
+  body("duration").optional().isInt({ min: 1, max: 120 }).withMessage("Duration must be between 1 and 120 minutes"),
+  body("projectId").optional().isString().withMessage("Project ID must be a string"),
   handleValidationErrors,
 ];

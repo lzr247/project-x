@@ -66,39 +66,27 @@ const RegistrationPage = () => {
               <span className="text-2xl font-bold text-accent">X</span>
             </div>
             <h1 className="text-2xl font-bold text-content">Create account</h1>
-            <p className="mt-2 text-content-secondary">
-              Start your productivity journey
-            </p>
+            <p className="mt-2 text-content-secondary">Start your productivity journey</p>
           </div>
 
           {error && (
-            <div className="mb-6 rounded-xl border border-danger/20 bg-danger/10 p-4 text-sm text-danger">
-              {error}
-            </div>
+            <div className="mb-6 rounded-xl border border-danger/20 bg-danger/10 p-4 text-sm text-danger">{error}</div>
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-content">
-                Name
-              </label>
+              <label className="mb-2 block text-sm font-medium text-content">Name</label>
               <input
                 type="text"
                 {...register("name", { required: "Name is required" })}
                 className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${errors.name ? "border-danger" : "border-transparent focus:border-accent"}`}
                 placeholder="John Doe"
               />
-              {errors.name && (
-                <p className="mt-2 text-sm text-danger">
-                  {errors.name.message}
-                </p>
-              )}
+              {errors.name && <p className="mt-2 text-sm text-danger">{errors.name.message}</p>}
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-content">
-                Email
-              </label>
+              <label className="mb-2 block text-sm font-medium text-content">Email</label>
               <input
                 type="email"
                 {...register("email", {
@@ -111,17 +99,11 @@ const RegistrationPage = () => {
                 className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${errors.email ? "border-danger" : "border-transparent focus:border-accent"}`}
                 placeholder="you@example.com"
               />
-              {errors.email && (
-                <p className="mt-2 text-sm text-danger">
-                  {errors.email.message}
-                </p>
-              )}
+              {errors.email && <p className="mt-2 text-sm text-danger">{errors.email.message}</p>}
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-content">
-                Password
-              </label>
+              <label className="mb-2 block text-sm font-medium text-content">Password</label>
               <input
                 type="password"
                 {...register("password", {
@@ -131,17 +113,11 @@ const RegistrationPage = () => {
                 className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${errors.password ? "border-danger" : "border-transparent focus:border-accent"}`}
                 placeholder="••••••••"
               />
-              {errors.password && (
-                <p className="mt-2 text-sm text-danger">
-                  {errors.password.message}
-                </p>
-              )}
+              {errors.password && <p className="mt-2 text-sm text-danger">{errors.password.message}</p>}
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-content">
-                Confirm Password
-              </label>
+              <label className="mb-2 block text-sm font-medium text-content">Confirm Password</label>
               <input
                 type="password"
                 {...register("confirmPassword", {
@@ -151,11 +127,7 @@ const RegistrationPage = () => {
                 className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${errors.confirmPassword ? "border-danger" : "border-transparent focus:border-accent"}`}
                 placeholder="••••••••"
               />
-              {errors.confirmPassword && (
-                <p className="mt-2 text-sm text-danger">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
+              {errors.confirmPassword && <p className="mt-2 text-sm text-danger">{errors.confirmPassword.message}</p>}
             </div>
 
             <button
@@ -175,11 +147,7 @@ const RegistrationPage = () => {
                       strokeWidth="4"
                       fill="none"
                     />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                    />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
                   Creating account...
                 </span>
@@ -191,10 +159,7 @@ const RegistrationPage = () => {
 
           <p className="mt-8 text-center text-content-secondary">
             Already have an account?{" "}
-            <Link
-              to="/login"
-              className="font-medium text-accent hover:underline"
-            >
+            <Link to="/login" className="font-medium text-accent hover:underline">
               Sign in
             </Link>
           </p>

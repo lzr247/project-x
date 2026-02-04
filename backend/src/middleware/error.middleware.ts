@@ -15,11 +15,7 @@ export class AppError extends Error {
 }
 
 // 404 Not Found Handler
-export const notFoundHandler = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const notFoundHandler = (req: Request, res: Response, next: NextFunction) => {
   return res.status(404).json({
     success: false,
     message: `Route ${req.originalUrl} not found.`,
@@ -27,12 +23,7 @@ export const notFoundHandler = (
 };
 
 // Global Error Handler
-export const errorHandler = (
-  err: Error | AppError,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const errorHandler = (err: Error | AppError, req: Request, res: Response, next: NextFunction) => {
   // If our custom error
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({

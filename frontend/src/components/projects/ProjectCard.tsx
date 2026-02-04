@@ -1,7 +1,7 @@
 import { faBullseye, faCheckCircle, faEllipsisV, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { Project } from "../../types";
 import { Link } from "react-router-dom";
+import type { Project } from "../../types";
 
 interface ProjectCardProps {
   project: Project;

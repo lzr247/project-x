@@ -21,15 +21,7 @@ const sizeClasses: Record<ModalSize, string> = {
   xl: "max-w-xl",
 };
 
-const Modal = ({
-  isOpen,
-  onClose,
-  title,
-  children,
-  size = "md",
-  showCloseButton = true,
-  colorBar,
-}: ModalProps) => {
+const Modal = ({ isOpen, onClose, title, children, size = "md", showCloseButton = true, colorBar }: ModalProps) => {
   useEffect(() => {
     // Close on ESC
     const handleEscape = (e: KeyboardEvent) => {
@@ -52,39 +44,24 @@ const Modal = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div
-        className={`relative w-full rounded-2xl bg-white shadow-xl ${sizeClasses[size]} overflow-hidden`}
-      >
+      <div className={`relative w-full rounded-2xl bg-white shadow-xl ${sizeClasses[size]} overflow-hidden`}>
         {/* Optional color bar */}
-        {colorBar && (
-          <div
-            className="h-2 transition-colors duration-300"
-            style={{ backgroundColor: colorBar }}
-          />
-        )}
+        {colorBar && <div className="h-2 transition-colors duration-300" style={{ backgroundColor: colorBar }} />}
 
         <div className="p-6">
           {/* Header */}
           {(title || showCloseButton) && (
             <div className="mb-6 flex items-center justify-between">
-              {title && (
-                <h2 className="text-xl font-semibold text-content">{title}</h2>
-              )}
+              {title && <h2 className="text-xl font-semibold text-content">{title}</h2>}
               {showCloseButton && (
                 <button
                   onClick={onClose}
                   className="ml-auto cursor-pointer rounded-lg p-2 transition-colors hover:bg-surface"
                 >
-                  <FontAwesomeIcon
-                    icon={faTimes}
-                    className="text-content-secondary"
-                  />
+                  <FontAwesomeIcon icon={faTimes} className="text-content-secondary" />
                 </button>
               )}
             </div>

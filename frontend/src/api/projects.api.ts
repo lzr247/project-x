@@ -19,9 +19,7 @@ export const getProjectById = async (id: string): Promise<ProjectWithGoals> => {
   return data.data;
 };
 
-export const createProject = async (
-  body: CreateProjectRequest
-): Promise<Project> => {
+export const createProject = async (body: CreateProjectRequest): Promise<Project> => {
   const response = await api.post("/projects", body);
   return response.data;
 };
@@ -36,18 +34,12 @@ export const getGoals = async (projectId: string): Promise<Goal[]> => {
   return data;
 };
 
-export const createGoal = async (
-  projectId: string,
-  body: CreateGoalRequest
-): Promise<Goal> => {
+export const createGoal = async (projectId: string, body: CreateGoalRequest): Promise<Goal> => {
   const { data } = await api.post(`/projects/${projectId}/goals`, body);
   return data;
 };
 
-export const updateGoal = async (
-  goalId: string,
-  body: UpdateGoalRequest
-): Promise<Goal> => {
+export const updateGoal = async (goalId: string, body: UpdateGoalRequest): Promise<Goal> => {
   const { data } = await api.put(`/goals/${goalId}`, body);
   return data;
 };

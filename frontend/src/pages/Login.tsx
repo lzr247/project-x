@@ -28,9 +28,7 @@ const LoginPage = () => {
       navigate("/");
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
-        setError(
-          err.response?.data?.message || "Login failed. Please try again."
-        );
+        setError(err.response?.data?.message || "Login failed. Please try again.");
       } else {
         setError("An unexpected error occurred.");
       }
@@ -56,24 +54,18 @@ const LoginPage = () => {
               <span className="text-2xl font-bold text-accent">X</span>
             </div>
             <h1 className="text-2xl font-bold text-content">Welcome back</h1>
-            <p className="mt-2 text-content-secondary">
-              Sign in to continue to Project X
-            </p>
+            <p className="mt-2 text-content-secondary">Sign in to continue to Project X</p>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="mb-6 rounded-xl border border-danger/20 bg-danger/10 p-4 text-sm text-danger">
-              {error}
-            </div>
+            <div className="mb-6 rounded-xl border border-danger/20 bg-danger/10 p-4 text-sm text-danger">{error}</div>
           )}
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
-              <label className="mb-2 block text-sm font-medium text-content">
-                Email
-              </label>
+              <label className="mb-2 block text-sm font-medium text-content">Email</label>
               <input
                 type="email"
                 {...register("email", {
@@ -84,23 +76,15 @@ const LoginPage = () => {
                   },
                 })}
                 className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${
-                  errors.email
-                    ? "border-danger focus:border-danger"
-                    : "border-transparent focus:border-accent"
+                  errors.email ? "border-danger focus:border-danger" : "border-transparent focus:border-accent"
                 }`}
                 placeholder="you@example.com"
               />
-              {errors.email && (
-                <p className="mt-2 text-sm text-danger">
-                  {errors.email.message}
-                </p>
-              )}
+              {errors.email && <p className="mt-2 text-sm text-danger">{errors.email.message}</p>}
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-content">
-                Password
-              </label>
+              <label className="mb-2 block text-sm font-medium text-content">Password</label>
               <input
                 type="password"
                 {...register("password", {
@@ -111,17 +95,11 @@ const LoginPage = () => {
                   },
                 })}
                 className={`w-full rounded-xl border-2 bg-surface px-4 py-3 transition-all focus:outline-none focus:ring-0 ${
-                  errors.password
-                    ? "border-danger focus:border-danger"
-                    : "border-transparent focus:border-accent"
+                  errors.password ? "border-danger focus:border-danger" : "border-transparent focus:border-accent"
                 }`}
                 placeholder="••••••••"
               />
-              {errors.password && (
-                <p className="mt-2 text-sm text-danger">
-                  {errors.password.message}
-                </p>
-              )}
+              {errors.password && <p className="mt-2 text-sm text-danger">{errors.password.message}</p>}
             </div>
 
             <button
@@ -141,11 +119,7 @@ const LoginPage = () => {
                       strokeWidth="4"
                       fill="none"
                     />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                    />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
                   Signing in...
                 </span>
@@ -158,10 +132,7 @@ const LoginPage = () => {
           {/* Footer */}
           <p className="mt-8 text-center text-content-secondary">
             Don't have an account?{" "}
-            <Link
-              to="/registration"
-              className="font-medium text-accent hover:underline"
-            >
+            <Link to="/registration" className="font-medium text-accent hover:underline">
               Create one
             </Link>
           </p>

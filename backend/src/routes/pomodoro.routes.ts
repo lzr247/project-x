@@ -1,9 +1,5 @@
 import express from "express";
-import {
-  completePomodoro,
-  getPomodoroStats,
-  startPomodoro,
-} from "../controllers/pomodoro.controller";
+import { completePomodoro, getPomodoroStats, startPomodoro } from "../controllers/pomodoro.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { validateStartPomodoro } from "../middleware/validation.middleware";
 

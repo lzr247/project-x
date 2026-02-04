@@ -24,9 +24,9 @@ Registracija novog korisnika.
 
 ```json
 {
-  "email": "user@example.com",    // required, valid email
-  "password": "123456",           // required, min 6 karaktera
-  "name": "John Doe"              // optional, min 2 karaktera
+  "email": "user@example.com", // required, valid email
+  "password": "123456", // required, min 6 karaktera
+  "name": "John Doe" // optional, min 2 karaktera
 }
 ```
 
@@ -60,8 +60,8 @@ Login korisnika.
 
 ```json
 {
-  "email": "user@example.com",    // required, valid email
-  "password": "123456"            // required
+  "email": "user@example.com", // required, valid email
+  "password": "123456" // required
 }
 ```
 
@@ -180,9 +180,9 @@ Kreira novi projekat.
 
 ```json
 {
-  "title": "My New Project",      // required, 1-100 karaktera
-  "description": "Description",    // optional, max 500 karaktera
-  "color": "#FF5733"              // optional, hex format (#RRGGBB), default: #3B82F6
+  "title": "My New Project", // required, 1-100 karaktera
+  "description": "Description", // optional, max 500 karaktera
+  "color": "#FF5733" // optional, hex format (#RRGGBB), default: #3B82F6
 }
 ```
 
@@ -224,10 +224,10 @@ Ažurira postojeći projekat.
 
 ```json
 {
-  "title": "Updated Title",       // optional, 1-100 karaktera
-  "description": "New desc",      // optional, max 500 karaktera
-  "color": "#00FF00",             // optional, hex format
-  "isCompleted": true             // optional, boolean
+  "title": "Updated Title", // optional, 1-100 karaktera
+  "description": "New desc", // optional, max 500 karaktera
+  "color": "#00FF00", // optional, hex format
+  "isCompleted": true // optional, boolean
 }
 ```
 
@@ -338,8 +338,8 @@ Kreira novi cilj za projekat.
 
 ```json
 {
-  "title": "New Goal",            // required, 1-200 karaktera
-  "description": "Goal desc"      // optional, max 500 karaktera
+  "title": "New Goal", // required, 1-200 karaktera
+  "description": "Goal desc" // optional, max 500 karaktera
 }
 ```
 
@@ -381,9 +381,9 @@ Ažurira postojeći cilj.
 
 ```json
 {
-  "title": "Updated Goal",        // optional, 1-200 karaktera
-  "description": "New desc",      // optional, max 500 karaktera
-  "isCompleted": true             // optional, boolean
+  "title": "Updated Goal", // optional, 1-200 karaktera
+  "description": "New desc", // optional, max 500 karaktera
+  "isCompleted": true // optional, boolean
 }
 ```
 
@@ -454,8 +454,8 @@ Započinje novu pomodoro sesiju.
 
 ```json
 {
-  "duration": 25,                 // optional, 1-120 minuta, default: 25
-  "projectId": "project-uuid"     // optional, povezuje sesiju sa projektom
+  "duration": 25, // optional, 1-120 minuta, default: 25
+  "projectId": "project-uuid" // optional, povezuje sesiju sa projektom
 }
 ```
 
@@ -472,7 +472,7 @@ Započinje novu pomodoro sesiju.
     "completed": false,
     "createdAt": "2026-01-01T10:00:00.000Z",
     "userId": "user-uuid",
-    "projectId": "project-uuid"   // ili null ako nije povezan sa projektom
+    "projectId": "project-uuid" // ili null ako nije povezan sa projektom
   }
 }
 ```
@@ -574,7 +574,7 @@ interface User {
   id: string;
   email: string;
   name: string | null;
-  createdAt: string;  // ISO date string
+  createdAt: string; // ISO date string
   updatedAt: string;
 }
 
@@ -583,12 +583,12 @@ interface Project {
   id: string;
   title: string;
   description: string | null;
-  color: string;          // hex format, npr. "#3B82F6"
+  color: string; // hex format, npr. "#3B82F6"
   isCompleted: boolean;
   createdAt: string;
   updatedAt: string;
   userId: string;
-  goals?: Goal[];         // uključeno u GET /projects i GET /projects/:id
+  goals?: Goal[]; // uključeno u GET /projects i GET /projects/:id
 }
 
 // Goal
@@ -605,14 +605,14 @@ interface Goal {
 // PomodoroSession
 interface PomodoroSession {
   id: string;
-  duration: number;       // u minutama
+  duration: number; // u minutama
   startTime: string;
   endTime: string | null;
   completed: boolean;
   createdAt: string;
   userId: string;
   projectId: string | null;
-  project?: Project;      // uključeno u stats
+  project?: Project; // uključeno u stats
 }
 
 // Auth Response
@@ -626,7 +626,7 @@ interface ApiResponse<T> {
   success: boolean;
   data?: T;
   message?: string;
-  errors?: ValidationError[];  // samo kod validation errora
+  errors?: ValidationError[]; // samo kod validation errora
 }
 
 // Pomodoro Stats
@@ -669,19 +669,19 @@ Kada validacija failuje (400 status):
 
 ## Quick Reference
 
-| Method | Endpoint | Auth | Opis |
-|--------|----------|------|------|
-| POST | `/api/auth/register` | ❌ | Registracija |
-| POST | `/api/auth/login` | ❌ | Login |
-| GET | `/api/projects` | ✅ | Lista projekata |
-| GET | `/api/projects/:id` | ✅ | Pojedinačni projekat |
-| POST | `/api/projects` | ✅ | Kreiranje projekta |
-| PUT | `/api/projects/:id` | ✅ | Update projekta |
-| DELETE | `/api/projects/:id` | ✅ | Brisanje projekta |
-| GET | `/api/projects/:projectId/goals` | ✅ | Lista ciljeva |
-| POST | `/api/projects/:projectId/goals` | ✅ | Kreiranje cilja |
-| PUT | `/api/goals/:id` | ✅ | Update cilja |
-| DELETE | `/api/goals/:id` | ✅ | Brisanje cilja |
-| POST | `/api/pomodoro/start` | ✅ | Start pomodoro |
-| POST | `/api/pomodoro/:id/complete` | ✅ | Završi pomodoro |
-| GET | `/api/pomodoro/stats` | ✅ | Pomodoro statistika |
+| Method | Endpoint                         | Auth | Opis                 |
+| ------ | -------------------------------- | ---- | -------------------- |
+| POST   | `/api/auth/register`             | ❌   | Registracija         |
+| POST   | `/api/auth/login`                | ❌   | Login                |
+| GET    | `/api/projects`                  | ✅   | Lista projekata      |
+| GET    | `/api/projects/:id`              | ✅   | Pojedinačni projekat |
+| POST   | `/api/projects`                  | ✅   | Kreiranje projekta   |
+| PUT    | `/api/projects/:id`              | ✅   | Update projekta      |
+| DELETE | `/api/projects/:id`              | ✅   | Brisanje projekta    |
+| GET    | `/api/projects/:projectId/goals` | ✅   | Lista ciljeva        |
+| POST   | `/api/projects/:projectId/goals` | ✅   | Kreiranje cilja      |
+| PUT    | `/api/goals/:id`                 | ✅   | Update cilja         |
+| DELETE | `/api/goals/:id`                 | ✅   | Brisanje cilja       |
+| POST   | `/api/pomodoro/start`            | ✅   | Start pomodoro       |
+| POST   | `/api/pomodoro/:id/complete`     | ✅   | Završi pomodoro      |
+| GET    | `/api/pomodoro/stats`            | ✅   | Pomodoro statistika  |

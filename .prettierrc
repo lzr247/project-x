@@ -10,9 +10,6 @@
   "arrowParens": "always",
   "endOfLine": "crlf",
   "jsxSingleQuote": false,
-  "plugins": [
-    "prettier-plugin-organize-imports",
-    "prettier-plugin-tailwindcss"
-  ],
+  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-tailwindcss"],
   "tailwindConfig": "./frontend/tailwind.config.ts"
 }
