@@ -7,7 +7,6 @@ import {
   faTrash,
   faArchive,
   faPause,
-  faBan,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -140,7 +139,13 @@ const ProjectDetails = () => {
   const completedGoals = project?.goals.filter((goal) => goal.isCompleted).length ?? 0;
   const totalGoals = project?.goals.length ?? 0;
   const progress = totalGoals > 0 ? (completedGoals / totalGoals) * 100 : 0;
-  const sortedGoals = [...(project?.goals ?? [])].sort((a, b) => Number(a.isCompleted) - Number(b.isCompleted));
+  const sortedGoals = [...(project?.goals ?? [])].sort((a, b) => {
+    if (a.isCompleted !== b.isCompleted) return Number(a.isCompleted) - Number(b.isCompleted);
+    if (a.isCompleted && b.isCompleted) {
+      return new Date(b.completedAt!).getTime() - new Date(a.completedAt!).getTime();
+    }
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
 
   return (
     <div className="min-h-full">

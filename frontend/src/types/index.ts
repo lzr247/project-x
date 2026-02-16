@@ -63,6 +63,7 @@ export interface Goal {
   createdAt: string;
   updatedAt: string;
   projectId: string;
+  completedAt: string | null;
 }
 
 export interface ProjectWithGoals extends Project {

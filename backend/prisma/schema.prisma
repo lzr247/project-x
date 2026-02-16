@@ -52,6 +52,7 @@ model Goal {
   isCompleted   Boolean @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  completedAt   DateTime?
 
   projectId     String
   project       Project @relation(fields: [projectId], references: [id], onDelete: Cascade)

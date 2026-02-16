@@ -98,11 +98,13 @@ export const updateGoal = async (req: Request, res: Response) => {
         title,
         description,
         isCompleted,
+        ...(isCompleted === true && !existingGoal.isCompleted ? { completedAt: new Date() } : {}),
+        ...(isCompleted === false && existingGoal.isCompleted ? { completedAt: null } : {}),
       },
     });
 
     return res.status(200).json({
-      success: false,
+      success: true,
       data: updatedGoal,
     });
   } catch (error) {
