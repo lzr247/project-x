@@ -140,6 +140,7 @@ const ProjectDetails = () => {
   const completedGoals = project?.goals.filter((goal) => goal.isCompleted).length ?? 0;
   const totalGoals = project?.goals.length ?? 0;
   const progress = totalGoals > 0 ? (completedGoals / totalGoals) * 100 : 0;
+  const sortedGoals = [...(project?.goals ?? [])].sort((a, b) => Number(a.isCompleted) - Number(b.isCompleted));
 
   return (
     <div className="min-h-full">
@@ -296,7 +297,7 @@ const ProjectDetails = () => {
         </div>
       ) : (
         <div className="space-y-3">
-          {project.goals.map((goal) => (
+          {sortedGoals.map((goal) => (
             <div
               key={goal.id}
               className={`group flex items-center gap-4 rounded-xl border bg-white p-4 transition-all ${
