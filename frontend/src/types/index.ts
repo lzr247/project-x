@@ -51,9 +51,8 @@ export interface UpdateProjectRequest {
   title?: string;
   description?: string;
   color?: string;
-  status: ProjectStatus;
-  completedAt: string | null;
-  isArchived: boolean;
+  status?: ProjectStatus;
+  isArchived?: boolean;
 }
 
 export interface Goal {

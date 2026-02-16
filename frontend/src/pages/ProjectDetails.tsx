@@ -166,7 +166,28 @@ const ProjectDetails = () => {
                 <FontAwesomeIcon icon={faBullseye} className="text-2xl" style={{ color: project.color }} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-content">{project.title}</h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl font-bold text-content">{project.title}</h1>
+                  <span
+                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                      project.status === "ACTIVE"
+                        ? "bg-accent/10 text-accent"
+                        : project.status === "COMPLETED"
+                          ? "bg-success/10 text-success"
+                          : project.status === "ON_HOLD"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-danger/10 text-danger"
+                    }`}
+                  >
+                    {project.status === "ACTIVE"
+                      ? "Active"
+                      : project.status === "COMPLETED"
+                        ? "Completed"
+                        : project.status === "ON_HOLD"
+                          ? "On Hold"
+                          : "Cancelled"}
+                  </span>
+                </div>
                 {project.description && <p className="mt-1 text-content-secondary">{project.description}</p>}
               </div>
             </div>
