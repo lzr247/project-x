@@ -5,26 +5,26 @@ export const ProjectCardSkeleton = () => {
       <div className="h-1.5 animate-pulse bg-gray-200" />
 
       <div className="p-5">
-        {/* Header Skeleton */}
-        <div className="mb-3 flex items-start gap-3">
-          {/* Icon Skeleton */}
-          <div className="h-10 w-10 animate-pulse rounded-xl bg-gray-200" />
-
-          <div className="flex-1">
-            {/* Title Skeleton */}
-            <div className="h-5 w-3/4 animate-pulse rounded-lg bg-gray-200" />
-          </div>
+        {/* Title Skeleton */}
+        <div className="mb-1">
+          <div className="h-5 w-3/5 animate-pulse rounded-lg bg-gray-200" />
         </div>
 
         {/* Description Skeleton */}
-        <div className="mb-4 space-y-2">
-          <div className="h-3 w-full animate-pulse rounded bg-gray-100" />
-          <div className="h-3 w-2/3 animate-pulse rounded bg-gray-100" />
+        <div className="mb-3 space-y-2">
+          <div className="h-3.5 w-full animate-pulse rounded bg-gray-100" />
+          <div className="h-3.5 w-2/3 animate-pulse rounded bg-gray-100" />
         </div>
 
-        {/* Goals Section Skeleton */}
-        <div className="mt-4 rounded-lg bg-surface px-3 py-2">
-          <div className="mx-auto h-3 w-1/2 animate-pulse rounded bg-gray-200" />
+        {/* Date Skeleton */}
+        <div className="mt-auto">
+          <div className="h-3 w-24 animate-pulse rounded bg-gray-100" />
+        </div>
+
+        {/* Goals Progress Skeleton */}
+        <div className="mt-3 flex items-center gap-3">
+          <div className="h-3 w-20 animate-pulse rounded bg-gray-200" />
+          <div className="h-1.5 flex-1 animate-pulse rounded-full bg-gray-100" />
         </div>
       </div>
     </div>

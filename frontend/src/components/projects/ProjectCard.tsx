@@ -1,4 +1,4 @@
-import { faBullseye, faEllipsisV, faFolder } from "@fortawesome/free-solid-svg-icons";
+import { faBullseye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import type { Project } from "../../types";
@@ -24,81 +24,53 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
       />
 
       <div className="flex flex-1 flex-col p-5">
-        {/* Header */}
-        <div className="mb-3 flex items-start justify-between">
-          <div
-            className="flex h-10 w-10 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
-            style={{ backgroundColor: `${project.color}15` }}
-          >
-            <FontAwesomeIcon icon={faFolder} className="text-lg" style={{ color: project.color }} />
-          </div>
-          <div>
-            <h3 className="group-hovere:text-accent font-semibold text-content transition-colors">{project.title}</h3>
-            {project.status !== "ACTIVE" && (
-              <span
-                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
-                  project.status === "COMPLETED"
-                    ? "bg-success/10 text-success"
-                    : project.status === "ON_HOLD"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-danger/10 text-danger"
-                }`}
-              >
-                {project.status === "COMPLETED" ? "Completed" : project.status === "ON_HOLD" ? "On Hold" : "Cancelled"}
-              </span>
-            )}
-          </div>
-
-          {/* Menu button */}
-          <button className="cursor-pointer rounded-lg p-2 opacity-0 transition-all hover:bg-surface group-hover:opacity-100">
-            <FontAwesomeIcon icon={faEllipsisV} className="text-content-muted" />
-          </button>
-        </div>
-
-        {/* Description  */}
-        <div className="mb-4 min-h-10 flex-1">
-          <p className="line-clamp-2 text-sm text-content-secondary">{project.description || <i>No description</i>}</p>
-        </div>
-
-        {/* Goals progress */}
-        <div className="mt-auto">
-          {totalGoals > 0 && (
-            <div className="mt-4">
-              <div className="mb-2 flex items-center justify-between text-xs">
-                <span className="flex items-center gap-1 text-content-secondary">
-                  <FontAwesomeIcon icon={faBullseye} className="text-content-muted" />
-                  Goals
-                </span>
-                <span className="font-medium text-content">
-                  {completedGoals}/{totalGoals}
-                </span>
-              </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
-                <div
-                  className="h-full rounded-full transition-all duration-500"
-                  style={{
-                    width: `${progress}%`,
-                    backgroundColor: project.color,
-                  }}
-                />
-              </div>
-            </div>
+        {/* Title + Status */}
+        <div className="mb-1 flex items-start justify-between gap-2">
+          <h3 className="font-semibold text-content transition-colors group-hover:text-accent">{project.title}</h3>
+          {project.status !== "ACTIVE" && (
+            <span
+              className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
+                project.status === "COMPLETED"
+                  ? "bg-success/10 text-success"
+                  : project.status === "ON_HOLD"
+                    ? "bg-yellow-100 text-yellow-700"
+                    : "bg-danger/10 text-danger"
+              }`}
+            >
+              {project.status === "COMPLETED" ? "Completed" : project.status === "ON_HOLD" ? "On Hold" : "Cancelled"}
+            </span>
           )}
         </div>
 
-        {/* Empty state for goals */}
-        {totalGoals === 0 && (
-          <div className="mt-4">
-            <div className="mb-2 flex items-center justify-between text-xs">
-              <span className="flex items-center gap-1 text-content-secondary">
-                <FontAwesomeIcon icon={faBullseye} className="text-content-muted" />
-                Goals
-              </span>
-              <span className="font-medium text-content-muted">0/0</span>
-            </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-gray-100" />
-          </div>
+        {/* Description */}
+        {project.description && (
+          <p className="mb-3 line-clamp-2 text-sm text-content-secondary">{project.description}</p>
         )}
+
+        {/* Created date */}
+        <p className="mt-auto text-xs text-content-muted">
+          {new Date(project.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+        </p>
+
+        {/* Goals progress */}
+        <div className="mt-3 flex items-center gap-3">
+          <span className="flex items-center gap-1.5 text-xs text-content-secondary">
+            <FontAwesomeIcon icon={faBullseye} className="text-content-muted" />
+            <span className="font-medium text-content">
+              {completedGoals}/{totalGoals}
+            </span>
+            goals
+          </span>
+          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{
+                width: `${progress}%`,
+                backgroundColor: project.color,
+              }}
+            />
+          </div>
+        </div>
       </div>
     </Link>
   );

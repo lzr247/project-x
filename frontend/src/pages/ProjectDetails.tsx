@@ -1,12 +1,16 @@
 import {
   faArrowLeft,
   faBullseye,
+  faCalendarAlt,
+  faChartSimple,
   faCheck,
+  faEllipsisV,
   faExclamationTriangle,
+  faPause,
+  faPlay,
   faPlus,
   faTrash,
   faArchive,
-  faPause,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -25,6 +29,7 @@ const ProjectDetails = () => {
   const [isAddGoalModalOpen, setIsAddGoalModalOpen] = useState(false);
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
   const [goalToDelete, setGoalToDelete] = useState<Goal | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const {
     data: project,
@@ -105,16 +110,24 @@ const ProjectDetails = () => {
   if (isLoading) {
     return (
       <div className="min-h-full">
-        {/* Header skeleton */}
-        <div className="mb-8">
-          <div className="mb-4 h-6 w-24 animate-pulse rounded-lg bg-gray-200" />
-          <div className="h-8 w-64 animate-pulse rounded-lg bg-gray-200" />
-          <div className="mt-2 h-4 w-96 animate-pulse rounded-lg bg-gray-100" />
+        <div className="mb-6 h-5 w-28 animate-pulse rounded-lg bg-gray-200" />
+        <div className="mb-8 flex items-center gap-4">
+          <div className="h-12 w-12 animate-pulse rounded-xl bg-gray-200" />
+          <div>
+            <div className="h-7 w-56 animate-pulse rounded-lg bg-gray-200" />
+            <div className="mt-2 h-4 w-80 animate-pulse rounded-lg bg-gray-100" />
+            <div className="mt-2 h-3 w-40 animate-pulse rounded-lg bg-gray-100" />
+          </div>
         </div>
-        {/* Goals skeleton */}
-        <div className="space-y-3">
+        <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="h-20 animate-pulse rounded-xl bg-gray-100" />
+          ))}
+        </div>
+        <div className="mb-4 h-5 w-16 animate-pulse rounded-lg bg-gray-200" />
+        <div className="space-y-2">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-16 animate-pulse rounded-xl bg-gray-100" />
+            <div key={i} className="h-18 animate-pulse rounded-xl bg-gray-100" />
           ))}
         </div>
       </div>
@@ -146,6 +159,8 @@ const ProjectDetails = () => {
     }
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
+  const incompleteGoals = sortedGoals.filter((g) => !g.isCompleted);
+  const completedGoalsList = sortedGoals.filter((g) => g.isCompleted);
 
   return (
     <div className="min-h-full">
@@ -158,120 +173,189 @@ const ProjectDetails = () => {
         Back to projects
       </Link>
 
-      {/* Project header */}
-      <div className="mb-8 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-card">
-        <div className="h-2" style={{ backgroundColor: project.color }} />
-
-        <div className="p-6">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-4">
-              <div
-                className="flex h-14 w-14 items-center justify-center rounded-xl"
-                style={{ backgroundColor: `${project.color}15` }}
-              >
-                <FontAwesomeIcon icon={faBullseye} className="text-2xl" style={{ color: project.color }} />
-              </div>
-              <div>
-                <div className="flex items-center gap-3">
-                  <h1 className="text-2xl font-bold text-content">{project.title}</h1>
-                  <span
-                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                      project.status === "ACTIVE"
-                        ? "bg-accent/10 text-accent"
-                        : project.status === "COMPLETED"
-                          ? "bg-success/10 text-success"
-                          : project.status === "ON_HOLD"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : "bg-danger/10 text-danger"
-                    }`}
-                  >
-                    {project.status === "ACTIVE"
-                      ? "Active"
-                      : project.status === "COMPLETED"
-                        ? "Completed"
-                        : project.status === "ON_HOLD"
-                          ? "On Hold"
-                          : "Cancelled"}
-                  </span>
-                </div>
-                {project.description && <p className="mt-1 text-content-secondary">{project.description}</p>}
-              </div>
+      {/* Page header */}
+      <div className="mb-8">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-4">
+            <div
+              className="flex h-12 w-12 items-center justify-center rounded-xl"
+              style={{ backgroundColor: `${project.color}15` }}
+            >
+              <FontAwesomeIcon icon={faBullseye} className="text-xl" style={{ color: project.color }} />
             </div>
-
-            <div className="flex items-center gap-2">
-              {/* Status buttons */}
-              {project.status !== "COMPLETED" && (
-                <button
-                  onClick={() => updateStatusMutation.mutate("COMPLETED")}
-                  className="cursor-pointer rounded-xl border border-success/20 bg-success/5 px-4 py-2 text-sm font-medium text-success transition-all hover:bg-success/10"
+            <div>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-bold text-content">{project.title}</h1>
+                <span
+                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                    project.status === "ACTIVE"
+                      ? "bg-accent/10 text-accent"
+                      : project.status === "COMPLETED"
+                        ? "bg-success/10 text-success"
+                        : project.status === "ON_HOLD"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-danger/10 text-danger"
+                  }`}
                 >
-                  <FontAwesomeIcon icon={faCheck} className="mr-2" />
-                  Complete
-                </button>
-              )}
-              {project.status !== "ON_HOLD" && (
-                <button
-                  onClick={() => updateStatusMutation.mutate("ON_HOLD")}
-                  className="cursor-pointer rounded-xl border border-yellow-300/50 bg-yellow-50 px-4 py-2 text-sm font-medium text-yellow-700 transition-all hover:bg-yellow-100"
-                >
-                  <FontAwesomeIcon icon={faPause} className="mr-2" />
-                  On Hold
-                </button>
-              )}
-              {project.status === "COMPLETED" || project.status === "ON_HOLD" ? (
-                <button
-                  onClick={() => updateStatusMutation.mutate("ACTIVE")}
-                  className="cursor-pointer rounded-xl border border-accent/20 bg-accent/5 px-4 py-2 text-sm font-medium text-accent transition-all hover:bg-accent/10"
-                >
-                  Reactivate
-                </button>
-              ) : null}
-
-              {/* Archive button */}
-              <button
-                onClick={() => archiveMutation.mutate()}
-                className="cursor-pointer rounded-xl border border-gray-200 bg-surface px-4 py-2 text-sm font-medium text-content-secondary transition-all hover:bg-gray-100"
-              >
-                <FontAwesomeIcon icon={faArchive} className="mr-2" />
-                {project.isArchived ? "Unarchive" : "Archive"}
-              </button>
-
-              {/* Delete project button */}
-              <button
-                onClick={() => setIsDeleteProjectModalOpen(true)}
-                className="cursor-pointer rounded-xl border border-danger/20 bg-danger/5 px-4 py-2 text-sm font-medium text-danger transition-all hover:bg-danger/10 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <FontAwesomeIcon icon={faTrash} className="mr-2" />
-                Delete Project
-              </button>
+                  {project.status === "ACTIVE"
+                    ? "Active"
+                    : project.status === "COMPLETED"
+                      ? "Completed"
+                      : project.status === "ON_HOLD"
+                        ? "On Hold"
+                        : "Cancelled"}
+                </span>
+                {project.isArchived && (
+                  <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-content-muted">
+                    Archived
+                  </span>
+                )}
+              </div>
+              {project.description && <p className="mt-1 text-content-secondary">{project.description}</p>}
+              <div className="mt-2 flex items-center gap-3 text-xs text-content-muted">
+                <span className="flex items-center gap-1.5">
+                  <FontAwesomeIcon icon={faCalendarAlt} />
+                  Created{" "}
+                  {new Date(project.createdAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </span>
+                <span>·</span>
+                <span>
+                  {totalGoals} {totalGoals === 1 ? "goal" : "goals"}
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Progress bar */}
-          {totalGoals > 0 && (
-            <div className="mt-6">
-              <div className="mb-2 flex items-center justify-between text-sm">
-                <span className="text-content-secondary">Progress</span>
-                <span className="font-medium text-content">
-                  {completedGoals} of {totalGoals} goals completed
-                </span>
-              </div>
-              <div className="h-2 overflow-hidden rounded-full bg-gray-100">
-                <div
-                  className="h-full rounded-full transition-all duration-500"
-                  style={{
-                    width: `${progress}%`,
-                    backgroundColor: project.color,
-                  }}
-                />
-              </div>
+          {/* Actions */}
+          <div className="flex items-center gap-2">
+            {project.status !== "COMPLETED" && (
+              <button
+                onClick={() => updateStatusMutation.mutate("COMPLETED")}
+                className="cursor-pointer rounded-xl border border-success/20 bg-success/5 px-4 py-2 text-sm font-medium text-success transition-all hover:bg-success/10"
+              >
+                <FontAwesomeIcon icon={faCheck} className="mr-2" />
+                Complete
+              </button>
+            )}
+            {project.status !== "ON_HOLD" && (
+              <button
+                onClick={() => updateStatusMutation.mutate("ON_HOLD")}
+                className="cursor-pointer rounded-xl border border-yellow-300/50 bg-yellow-50 px-4 py-2 text-sm font-medium text-yellow-700 transition-all hover:bg-yellow-100"
+              >
+                <FontAwesomeIcon icon={faPause} className="mr-2" />
+                On Hold
+              </button>
+            )}
+            {(project.status === "COMPLETED" || project.status === "ON_HOLD") && (
+              <button
+                onClick={() => updateStatusMutation.mutate("ACTIVE")}
+                className="cursor-pointer rounded-xl border border-accent/20 bg-accent/5 px-4 py-2 text-sm font-medium text-accent transition-all hover:bg-accent/10"
+              >
+                <FontAwesomeIcon icon={faPlay} className="mr-2" />
+                Reactivate
+              </button>
+            )}
+
+            {/* Dropdown menu */}
+            <div className="relative">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="cursor-pointer rounded-xl border border-gray-200 bg-white p-2.5 text-content-secondary transition-all hover:bg-surface-hover"
+              >
+                <FontAwesomeIcon icon={faEllipsisV} />
+              </button>
+              {isDropdownOpen && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setIsDropdownOpen(false)} />
+                  <div className="absolute right-0 top-full z-20 mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white py-1 shadow-card-hover">
+                    <button
+                      onClick={() => {
+                        archiveMutation.mutate();
+                        setIsDropdownOpen(false);
+                      }}
+                      className="flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-sm text-content-secondary transition-colors hover:bg-surface"
+                    >
+                      <FontAwesomeIcon icon={faArchive} className="w-4" />
+                      {project.isArchived ? "Unarchive" : "Archive"}
+                    </button>
+                    <div className="mx-3 my-1 border-t border-gray-100" />
+                    <button
+                      onClick={() => {
+                        setIsDeleteProjectModalOpen(true);
+                        setIsDropdownOpen(false);
+                      }}
+                      className="flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-sm text-danger transition-colors hover:bg-danger/5"
+                    >
+                      <FontAwesomeIcon icon={faTrash} className="w-4" />
+                      Delete project
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
 
-      {/* Goals section */}
-      <div className="mb-6 flex items-center justify-between">
+      {/* Stats section */}
+      {totalGoals > 0 && (
+        <div className="mb-8">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-card">
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: `${project.color}15` }}
+                >
+                  <FontAwesomeIcon icon={faBullseye} style={{ color: project.color }} />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-content">{totalGoals}</p>
+                  <p className="text-xs text-content-muted">Total Goals</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-card">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10">
+                  <FontAwesomeIcon icon={faCheck} className="text-success" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-content">{completedGoals}</p>
+                  <p className="text-xs text-content-muted">Completed</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-card">
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: `${project.color}15` }}
+                >
+                  <FontAwesomeIcon icon={faChartSimple} style={{ color: project.color }} />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-content">{Math.round(progress)}%</p>
+                  <p className="text-xs text-content-muted">Progress</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-gray-100">
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{ width: `${progress}%`, backgroundColor: project.color }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Goals section header */}
+      <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-4">
         <h2 className="text-lg font-semibold text-content">Goals</h2>
         <button
           onClick={() => setIsAddGoalModalOpen(true)}
@@ -301,49 +385,93 @@ const ProjectDetails = () => {
           </button>
         </div>
       ) : (
-        <div className="space-y-3">
-          {sortedGoals.map((goal) => (
-            <div
-              key={goal.id}
-              className={`group flex items-center gap-4 rounded-xl border bg-white p-4 transition-all ${
-                goal.isCompleted
-                  ? "border-gray-100 bg-gray-50/50"
-                  : "border-gray-100 hover:border-gray-200 hover:shadow-sm"
-              }`}
-            >
-              {/* Checkbox */}
-              <button
-                onClick={() => handleToggleGoal(goal)}
-                disabled={toggleGoalMutation.isPending}
-                className={`flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full border-2 transition-all ${
-                  goal.isCompleted ? "border-success bg-success text-white" : "border-gray-300 hover:border-accent"
-                }`}
-                style={goal.isCompleted ? {} : { borderColor: project.color + "60" }}
-              >
-                {goal.isCompleted && <FontAwesomeIcon icon={faCheck} className="text-xs" />}
-              </button>
-
-              {/* Goal content */}
-              <div className="flex-1">
-                <h3 className={`font-medium ${goal.isCompleted ? "text-content-muted line-through" : "text-content"}`}>
-                  {goal.title}
-                </h3>
-                {goal.description && (
-                  <p className={`mt-0.5 text-sm ${goal.isCompleted ? "text-content-muted" : "text-content-secondary"}`}>
-                    {goal.description}
-                  </p>
-                )}
-              </div>
-
-              {/* Delete button */}
-              <button
-                onClick={() => setGoalToDelete(goal)}
-                className="cursor-pointer rounded-lg p-2 text-content-muted opacity-0 transition-all hover:bg-danger/10 hover:text-danger group-hover:opacity-100"
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
+        <div>
+          {/* Incomplete goals */}
+          {incompleteGoals.length > 0 && (
+            <div className="space-y-2">
+              {incompleteGoals.map((goal) => (
+                <div
+                  key={goal.id}
+                  className="group flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 transition-all hover:border-gray-200 hover:shadow-sm"
+                >
+                  <button
+                    onClick={() => handleToggleGoal(goal)}
+                    disabled={toggleGoalMutation.isPending}
+                    className="mt-0.5 flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full border-2 transition-all hover:scale-110"
+                    style={{ borderColor: project.color + "60" }}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-medium text-content">{goal.title}</h3>
+                    {goal.description && <p className="mt-0.5 text-sm text-content-secondary">{goal.description}</p>}
+                    <p className="mt-1.5 text-xs text-content-muted">
+                      Added{" "}
+                      {new Date(goal.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setGoalToDelete(goal)}
+                    className="cursor-pointer rounded-lg p-2 text-content-muted opacity-0 transition-all hover:bg-danger/10 hover:text-danger group-hover:opacity-100"
+                  >
+                    <FontAwesomeIcon icon={faTrash} className="text-sm" />
+                  </button>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
+
+          {/* Completed divider */}
+          {completedGoalsList.length > 0 && incompleteGoals.length > 0 && (
+            <div className="my-6 flex items-center gap-3">
+              <div className="h-px flex-1 bg-gray-200" />
+              <span className="flex items-center gap-2 text-xs font-medium text-content-muted">
+                <FontAwesomeIcon icon={faCheck} className="text-success" />
+                Completed ({completedGoalsList.length})
+              </span>
+              <div className="h-px flex-1 bg-gray-200" />
+            </div>
+          )}
+
+          {/* Completed goals */}
+          {completedGoalsList.length > 0 && (
+            <div className="space-y-2">
+              {incompleteGoals.length === 0 && (
+                <p className="mb-3 flex items-center gap-2 text-xs font-medium text-content-muted">
+                  <FontAwesomeIcon icon={faCheck} className="text-success" />
+                  Completed ({completedGoalsList.length})
+                </p>
+              )}
+              {completedGoalsList.map((goal) => (
+                <div
+                  key={goal.id}
+                  className="group flex items-start gap-4 rounded-xl border border-gray-100 bg-gray-50/50 p-4 transition-all"
+                >
+                  <button
+                    onClick={() => handleToggleGoal(goal)}
+                    disabled={toggleGoalMutation.isPending}
+                    className="mt-0.5 flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full border-2 border-success bg-success text-white transition-all hover:scale-110"
+                  >
+                    <FontAwesomeIcon icon={faCheck} className="text-[10px]" />
+                  </button>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-medium text-content-muted line-through">{goal.title}</h3>
+                    {goal.description && <p className="mt-0.5 text-sm text-content-muted">{goal.description}</p>}
+                    {goal.completedAt && (
+                      <p className="mt-1.5 text-xs text-content-muted">
+                        Completed{" "}
+                        {new Date(goal.completedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => setGoalToDelete(goal)}
+                    className="cursor-pointer rounded-lg p-2 text-content-muted opacity-0 transition-all hover:bg-danger/10 hover:text-danger group-hover:opacity-100"
+                  >
+                    <FontAwesomeIcon icon={faTrash} className="text-sm" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

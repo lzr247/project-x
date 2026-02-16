@@ -1,4 +1,4 @@
-import { faExclamationTriangle, faFolderOpen, faPlus, faSearch, faArchive } from "@fortawesome/free-solid-svg-icons";
+import { faArchive, faExclamationTriangle, faFolderOpen, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -28,12 +28,14 @@ const Projects = () => {
 
   return (
     <div className="min-h-full">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Header - Row 1: Title + Button */}
+      <div className="mb-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold text-content">Projects</h1>
-            <p className="mt-1 text-content-secondary">Manage your projects and goals</p>
+            <p className="mt-1 text-sm text-content-muted">
+              {projects ? `${projects.length} project${projects.length !== 1 ? "s" : ""}` : "Loading..."}
+            </p>
           </div>
 
           <button
@@ -43,32 +45,34 @@ const Projects = () => {
             <FontAwesomeIcon icon={faPlus} />
             New Project
           </button>
+        </div>
 
-          {/* Search bar */}
-          <div className="relative max-w-md">
+        {/* Row 2: Search + Tabs */}
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="relative max-w-sm flex-1">
             <FontAwesomeIcon icon={faSearch} className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted" />
             <input
               type="text"
-              placeholder="Search projects"
+              placeholder="Search projects..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border-gray-200 bg-white py-2.5 pl-11 pr-4 outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
+              className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-11 pr-4 text-sm outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
             />
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex rounded-xl bg-surface p-1">
             <button
               onClick={() => setShowArchived(false)}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                !showArchived ? "bg-accent text-white" : "text-content-secondary hover:bg-surface"
+              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
+                !showArchived ? "bg-white text-content shadow-sm" : "text-content-muted hover:text-content"
               }`}
             >
               Active
             </button>
             <button
               onClick={() => setShowArchived(true)}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                showArchived ? "bg-accent text-white" : "text-content-secondary hover:bg-surface"
+              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
+                showArchived ? "bg-white text-content shadow-sm" : "text-content-muted hover:text-content"
               }`}
             >
               Archived
