@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuthStore } from "../store/auth.store";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: faChartLine },
@@ -110,6 +111,11 @@ export const Layout = () => {
               <p className="truncate text-xs text-sidebar-text">{user.email}</p>
             </div>
           )}
+
+          {/* Theme toggle */}
+          <div className={`mb-2 ${collapsed ? "" : "px-1"}`}>
+            <ThemeToggle collapsed={collapsed} />
+          </div>
 
           {/* Logout button */}
           <button

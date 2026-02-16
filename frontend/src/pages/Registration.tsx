@@ -59,7 +59,7 @@ const RegistrationPage = () => {
       </div>
 
       <div className="relative w-full max-w-md">
-        <div className="rounded-2xl bg-white/95 p-8 shadow-soft backdrop-blur-sm">
+        <div className="rounded-2xl bg-surface-card/95 p-8 shadow-soft backdrop-blur-sm">
           {/* Header */}
           <div className="mb-8 text-center">
             <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10">

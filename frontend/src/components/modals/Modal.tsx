@@ -47,7 +47,7 @@ const Modal = ({ isOpen, onClose, title, children, size = "md", showCloseButton 
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className={`relative w-full rounded-2xl bg-white shadow-xl ${sizeClasses[size]} overflow-hidden`}>
+      <div className={`relative w-full rounded-2xl bg-surface-card shadow-xl ${sizeClasses[size]} overflow-hidden`}>
         {/* Optional color bar */}
         {colorBar && <div className="h-2 transition-colors duration-300" style={{ backgroundColor: colorBar }} />}
 

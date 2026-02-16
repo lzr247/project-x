@@ -65,7 +65,7 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
             })}
             type="text"
             placeholder="Enter project name"
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
+            className="w-full rounded-xl border border-border-strong bg-surface-card px-4 py-3 text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
           {errors.title && <p className="mt-1 text-sm text-danger">{errors.title.message}</p>}
         </div>
@@ -79,7 +79,7 @@ const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
             })}
             rows={3}
             placeholder="Brief project description (optional)"
-            className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
+            className="w-full resize-none rounded-xl border border-border-strong bg-surface-card px-4 py-3 text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
           {errors.description && <p className="mt-1 text-sm text-danger">{errors.description.message}</p>}
         </div>

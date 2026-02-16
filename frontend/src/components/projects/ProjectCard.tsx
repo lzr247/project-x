@@ -15,7 +15,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <Link
       to={`/project/${project.id}`}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-card transition-all duration-300 hover:border-gray-200 hover:shadow-card-hover"
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface-card shadow-card transition-all duration-300 hover:border-border-strong hover:shadow-card-hover"
     >
       {/* Color bar */}
       <div
@@ -61,7 +61,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             </span>
             goals
           </span>
-          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
+          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-hover">
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{

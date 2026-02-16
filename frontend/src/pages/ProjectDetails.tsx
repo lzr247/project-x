@@ -110,24 +110,24 @@ const ProjectDetails = () => {
   if (isLoading) {
     return (
       <div className="min-h-full">
-        <div className="mb-6 h-5 w-28 animate-pulse rounded-lg bg-gray-200" />
+        <div className="mb-6 h-5 w-28 animate-pulse rounded-lg bg-skeleton" />
         <div className="mb-8 flex items-center gap-4">
-          <div className="h-12 w-12 animate-pulse rounded-xl bg-gray-200" />
+          <div className="h-12 w-12 animate-pulse rounded-xl bg-skeleton" />
           <div>
-            <div className="h-7 w-56 animate-pulse rounded-lg bg-gray-200" />
-            <div className="mt-2 h-4 w-80 animate-pulse rounded-lg bg-gray-100" />
-            <div className="mt-2 h-3 w-40 animate-pulse rounded-lg bg-gray-100" />
+            <div className="h-7 w-56 animate-pulse rounded-lg bg-skeleton" />
+            <div className="mt-2 h-4 w-80 animate-pulse rounded-lg bg-skeleton-light" />
+            <div className="mt-2 h-3 w-40 animate-pulse rounded-lg bg-skeleton-light" />
           </div>
         </div>
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-20 animate-pulse rounded-xl bg-gray-100" />
+            <div key={i} className="h-20 animate-pulse rounded-xl bg-skeleton-light" />
           ))}
         </div>
-        <div className="mb-4 h-5 w-16 animate-pulse rounded-lg bg-gray-200" />
+        <div className="mb-4 h-5 w-16 animate-pulse rounded-lg bg-skeleton" />
         <div className="space-y-2">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-18 animate-pulse rounded-xl bg-gray-100" />
+            <div key={i} className="h-18 animate-pulse rounded-xl bg-skeleton-light" />
           ))}
         </div>
       </div>
@@ -206,7 +206,7 @@ const ProjectDetails = () => {
                         : "Cancelled"}
                 </span>
                 {project.isArchived && (
-                  <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-content-muted">
+                  <span className="inline-flex items-center rounded-full bg-surface-hover px-2.5 py-0.5 text-xs font-medium text-content-muted">
                     Archived
                   </span>
                 )}
@@ -264,14 +264,14 @@ const ProjectDetails = () => {
             <div className="relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="cursor-pointer rounded-xl border border-gray-200 bg-white p-2.5 text-content-secondary transition-all hover:bg-surface-hover"
+                className="cursor-pointer rounded-xl border border-border-strong bg-surface-card p-2.5 text-content-secondary transition-all hover:bg-surface-hover"
               >
                 <FontAwesomeIcon icon={faEllipsisV} />
               </button>
               {isDropdownOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setIsDropdownOpen(false)} />
-                  <div className="absolute right-0 top-full z-20 mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white py-1 shadow-card-hover">
+                  <div className="absolute right-0 top-full z-20 mt-2 w-48 overflow-hidden rounded-xl border border-border bg-surface-card py-1 shadow-card-hover">
                     <button
                       onClick={() => {
                         archiveMutation.mutate();
@@ -282,7 +282,7 @@ const ProjectDetails = () => {
                       <FontAwesomeIcon icon={faArchive} className="w-4" />
                       {project.isArchived ? "Unarchive" : "Archive"}
                     </button>
-                    <div className="mx-3 my-1 border-t border-gray-100" />
+                    <div className="mx-3 my-1 border-t border-border" />
                     <button
                       onClick={() => {
                         setIsDeleteProjectModalOpen(true);
@@ -305,7 +305,7 @@ const ProjectDetails = () => {
       {totalGoals > 0 && (
         <div className="mb-8">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-card">
+            <div className="rounded-xl border border-border bg-surface-card p-4 shadow-card">
               <div className="flex items-center gap-3">
                 <div
                   className="flex h-10 w-10 items-center justify-center rounded-lg"
@@ -319,7 +319,7 @@ const ProjectDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-card">
+            <div className="rounded-xl border border-border bg-surface-card p-4 shadow-card">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10">
                   <FontAwesomeIcon icon={faCheck} className="text-success" />
@@ -330,7 +330,7 @@ const ProjectDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-card">
+            <div className="rounded-xl border border-border bg-surface-card p-4 shadow-card">
               <div className="flex items-center gap-3">
                 <div
                   className="flex h-10 w-10 items-center justify-center rounded-lg"
@@ -345,7 +345,7 @@ const ProjectDetails = () => {
               </div>
             </div>
           </div>
-          <div className="mt-4 h-2 overflow-hidden rounded-full bg-gray-100">
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-surface-hover">
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{ width: `${progress}%`, backgroundColor: project.color }}
@@ -355,7 +355,7 @@ const ProjectDetails = () => {
       )}
 
       {/* Goals section header */}
-      <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-4">
+      <div className="mb-4 flex items-center justify-between border-b border-border pb-4">
         <h2 className="text-lg font-semibold text-content">Goals</h2>
         <button
           onClick={() => setIsAddGoalModalOpen(true)}
@@ -367,7 +367,7 @@ const ProjectDetails = () => {
 
       {/* Goals list */}
       {project.goals.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-surface/50 py-16">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border-strong bg-surface/50 py-16">
           <div
             className="mb-4 flex h-16 w-16 items-center justify-center rounded-full"
             style={{ backgroundColor: `${project.color}15` }}
@@ -392,7 +392,7 @@ const ProjectDetails = () => {
               {incompleteGoals.map((goal) => (
                 <div
                   key={goal.id}
-                  className="group flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 transition-all hover:border-gray-200 hover:shadow-sm"
+                  className="group flex items-start gap-4 rounded-xl border border-border bg-surface-card p-4 transition-all hover:border-border-strong hover:shadow-sm"
                 >
                   <button
                     onClick={() => handleToggleGoal(goal)}
@@ -422,12 +422,12 @@ const ProjectDetails = () => {
           {/* Completed divider */}
           {completedGoalsList.length > 0 && incompleteGoals.length > 0 && (
             <div className="my-6 flex items-center gap-3">
-              <div className="h-px flex-1 bg-gray-200" />
+              <div className="h-px flex-1 bg-border" />
               <span className="flex items-center gap-2 text-xs font-medium text-content-muted">
                 <FontAwesomeIcon icon={faCheck} className="text-success" />
                 Completed ({completedGoalsList.length})
               </span>
-              <div className="h-px flex-1 bg-gray-200" />
+              <div className="h-px flex-1 bg-border" />
             </div>
           )}
 
@@ -443,7 +443,7 @@ const ProjectDetails = () => {
               {completedGoalsList.map((goal) => (
                 <div
                   key={goal.id}
-                  className="group flex items-start gap-4 rounded-xl border border-gray-100 bg-gray-50/50 p-4 transition-all"
+                  className="group flex items-start gap-4 rounded-xl border border-border bg-surface/50 p-4 transition-all"
                 >
                   <button
                     onClick={() => handleToggleGoal(goal)}

@@ -56,7 +56,7 @@ const Projects = () => {
               placeholder="Search projects..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-11 pr-4 text-sm outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
+              className="w-full rounded-xl border border-border-strong bg-surface-card py-2.5 pl-11 pr-4 text-sm text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
             />
           </div>
 
@@ -64,7 +64,7 @@ const Projects = () => {
             <button
               onClick={() => setShowArchived(false)}
               className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
-                !showArchived ? "bg-white text-content shadow-sm" : "text-content-muted hover:text-content"
+                !showArchived ? "bg-surface-card text-content shadow-sm" : "text-content-muted hover:text-content"
               }`}
             >
               Active
@@ -72,7 +72,7 @@ const Projects = () => {
             <button
               onClick={() => setShowArchived(true)}
               className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
-                showArchived ? "bg-white text-content shadow-sm" : "text-content-muted hover:text-content"
+                showArchived ? "bg-surface-card text-content shadow-sm" : "text-content-muted hover:text-content"
               }`}
             >
               Archived
