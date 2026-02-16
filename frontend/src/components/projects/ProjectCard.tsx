@@ -1,4 +1,4 @@
-import { faBullseye, faCheckCircle, faEllipsisV, faFolder } from "@fortawesome/free-solid-svg-icons";
+import { faBullseye, faEllipsisV, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import type { Project } from "../../types";
@@ -34,9 +34,17 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           </div>
           <div>
             <h3 className="group-hovere:text-accent font-semibold text-content transition-colors">{project.title}</h3>
-            {project.isCompleted && (
-              <span className="inline-flex items-center gap-1 text-xs text-success">
-                <FontAwesomeIcon icon={faCheckCircle} />
+            {project.status !== "ACTIVE" && (
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
+                  project.status === "COMPLETED"
+                    ? "bg-success/10 text-success"
+                    : project.status === "ON_HOLD"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : "bg-danger/10 text-danger"
+                }`}
+              >
+                {project.status === "COMPLETED" ? "Completed" : project.status === "ON_HOLD" ? "On Hold" : "Cancelled"}
               </span>
             )}
           </div>

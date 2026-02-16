@@ -1,4 +1,4 @@
-import { faExclamationTriangle, faFolderOpen, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faExclamationTriangle, faFolderOpen, faPlus, faSearch, faArchive } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -10,14 +10,15 @@ import { ProjectCardSkeleton } from "../components/skeletons/ProjectCardSkeleton
 const Projects = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showArchived, setShowArchived] = useState(false);
 
   const {
     data: projects,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["projects"],
-    queryFn: getProjects,
+    queryKey: ["projects", showArchived],
+    queryFn: () => getProjects(showArchived),
   });
 
   const filteredProjects =
@@ -54,6 +55,25 @@ const Projects = () => {
               className="w-full rounded-xl border-gray-200 bg-white py-2.5 pl-11 pr-4 outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
             />
           </div>
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowArchived(false)}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                !showArchived ? "bg-accent text-white" : "text-content-secondary hover:bg-surface"
+              }`}
+            >
+              Active
+            </button>
+            <button
+              onClick={() => setShowArchived(true)}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                showArchived ? "bg-accent text-white" : "text-content-secondary hover:bg-surface"
+              }`}
+            >
+              Archived
+            </button>
+          </div>
         </div>
       </div>
 
@@ -87,19 +107,25 @@ const Projects = () => {
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-accent/10">
-            <FontAwesomeIcon icon={faFolderOpen} className="text-3xl text-accent" />
+            <FontAwesomeIcon icon={showArchived ? faArchive : faFolderOpen} className="text-3xl text-accent" />
           </div>
-          <h3 className="mb-2 text-lg font-semibold text-content">No projects yet</h3>
+          <h3 className="mb-2 text-lg font-semibold text-content">
+            {showArchived ? "No archived projects" : "No projects yet"}
+          </h3>
           <p className="mb-6 max-w-sm text-center text-content-secondary">
-            Create your first project and start organizing your goals
+            {showArchived
+              ? "Projects you archive will appear here"
+              : "Create your first project and start organizing your goals"}
           </p>
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 font-medium text-white transition-all duration-200 hover:bg-accent-hover"
-          >
-            <FontAwesomeIcon icon={faPlus} />
-            Create First Project
-          </button>
+          {!showArchived && (
+            <button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 font-medium text-white transition-all duration-200 hover:bg-accent-hover"
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              Create First Project
+            </button>
+          )}
         </div>
       )}
 

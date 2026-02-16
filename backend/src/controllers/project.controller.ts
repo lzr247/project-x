@@ -5,9 +5,10 @@ import { prisma } from "../config/database";
 export const getProjects = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
+    const showArchived = req.query.archived === "true";
 
     const projects = await prisma.project.findMany({
-      where: { userId },
+      where: { userId, isArchived: showArchived },
       include: {
         _count: {
           select: { goals: true },
@@ -111,7 +112,7 @@ export const updateProject = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
     const projectId = req.params.id;
-    const { title, description, color, isCompleted } = req.body;
+    const { title, description, color, status, isArchived } = req.body;
 
     const existingProject = await prisma.project.findFirst({
       where: { id: projectId, userId },
@@ -130,7 +131,10 @@ export const updateProject = async (req: Request, res: Response) => {
         title,
         description,
         color,
-        isCompleted,
+        status,
+        isArchived,
+        ...(status === "COMPLETED" && existingProject.status !== "COMPLETED" ? { completedAt: new Date() } : {}),
+        ...(status && status !== "COMPLETED" && existingProject.status === "COMPLETED" ? { completedAt: null } : {}),
       },
     });
 

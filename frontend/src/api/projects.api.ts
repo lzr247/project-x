@@ -5,12 +5,13 @@ import type {
   Project,
   ProjectWithGoals,
   UpdateGoalRequest,
+  UpdateProjectRequest,
 } from "../types";
 import api from "./axios.config";
 
 // Projects API
-export const getProjects = async (): Promise<Project[]> => {
-  const { data } = await api.get("/projects");
+export const getProjects = async (archived: boolean = false): Promise<Project[]> => {
+  const { data } = await api.get(`/projects?archived=${archived}`);
   return data.data;
 };
 
@@ -26,6 +27,11 @@ export const createProject = async (body: CreateProjectRequest): Promise<Project
 
 export const deleteProject = async (id: string): Promise<void> => {
   await api.delete(`/projects/${id}`);
+};
+
+export const updateProject = async (id: string, body: UpdateProjectRequest): Promise<Project> => {
+  const { data } = await api.put(`/projects/${id}`, body);
+  return data.data;
 };
 
 // Goals API

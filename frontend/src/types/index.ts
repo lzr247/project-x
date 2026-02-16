@@ -22,12 +22,16 @@ export interface RegisterCredentials {
   name?: string;
 }
 
+export type ProjectStatus = "ACTIVE" | "COMPLETED" | "ON_HOLD" | "CANCELLED";
+
 export interface Project {
   id: string;
   title: string;
   description: string | null;
   color: string;
-  isCompleted: boolean;
+  status: ProjectStatus;
+  completedAt: string | null;
+  isArchived: boolean;
   createdAt: string;
   updatedAt: string;
   userId: string;
@@ -47,7 +51,9 @@ export interface UpdateProjectRequest {
   title?: string;
   description?: string;
   color?: string;
-  isCompleted?: boolean;
+  status: ProjectStatus;
+  completedAt: string | null;
+  isArchived: boolean;
 }
 
 export interface Goal {

@@ -5,16 +5,19 @@ import {
   faExclamationTriangle,
   faPlus,
   faTrash,
+  faArchive,
+  faPause,
+  faBan,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { deleteGoal, deleteProject, getProjectById, updateGoal } from "../api/projects.api";
+import { deleteGoal, deleteProject, getProjectById, updateGoal, updateProject } from "../api/projects.api";
 import AddGoalModal from "../components/modals/AddGoalModal";
 import ConfirmModal from "../components/modals/ConfirmModal";
-import type { Goal } from "../types";
+import type { Goal, ProjectStatus } from "../types";
 
 const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -65,6 +68,24 @@ const ProjectDetails = () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success("Project deleted");
       navigate("/projects");
+    },
+  });
+
+  const updateStatusMutation = useMutation({
+    mutationFn: (status: ProjectStatus) => updateProject(id!, { status }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["project", id] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      toast.success("Project status updated");
+    },
+  });
+
+  const archiveMutation = useMutation({
+    mutationFn: () => updateProject(id!, { isArchived: !project?.isArchived }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["project", id] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      toast.success(project?.isArchived ? "Project unarchived" : "Project archived");
     },
   });
 
@@ -150,14 +171,53 @@ const ProjectDetails = () => {
               </div>
             </div>
 
-            {/* Delete project button */}
-            <button
-              onClick={() => setIsDeleteProjectModalOpen(true)}
-              className="cursor-pointer rounded-xl border border-danger/20 bg-danger/5 px-4 py-2 text-sm font-medium text-danger transition-all hover:bg-danger/10 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <FontAwesomeIcon icon={faTrash} className="mr-2" />
-              Delete Project
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Status buttons */}
+              {project.status !== "COMPLETED" && (
+                <button
+                  onClick={() => updateStatusMutation.mutate("COMPLETED")}
+                  className="cursor-pointer rounded-xl border border-success/20 bg-success/5 px-4 py-2 text-sm font-medium text-success transition-all hover:bg-success/10"
+                >
+                  <FontAwesomeIcon icon={faCheck} className="mr-2" />
+                  Complete
+                </button>
+              )}
+              {project.status !== "ON_HOLD" && (
+                <button
+                  onClick={() => updateStatusMutation.mutate("ON_HOLD")}
+                  className="cursor-pointer rounded-xl border border-yellow-300/50 bg-yellow-50 px-4 py-2 text-sm font-medium text-yellow-700 transition-all hover:bg-yellow-100"
+                >
+                  <FontAwesomeIcon icon={faPause} className="mr-2" />
+                  On Hold
+                </button>
+              )}
+              {project.status === "COMPLETED" || project.status === "ON_HOLD" ? (
+                <button
+                  onClick={() => updateStatusMutation.mutate("ACTIVE")}
+                  className="cursor-pointer rounded-xl border border-accent/20 bg-accent/5 px-4 py-2 text-sm font-medium text-accent transition-all hover:bg-accent/10"
+                >
+                  Reactivate
+                </button>
+              ) : null}
+
+              {/* Archive button */}
+              <button
+                onClick={() => archiveMutation.mutate()}
+                className="cursor-pointer rounded-xl border border-gray-200 bg-surface px-4 py-2 text-sm font-medium text-content-secondary transition-all hover:bg-gray-100"
+              >
+                <FontAwesomeIcon icon={faArchive} className="mr-2" />
+                {project.isArchived ? "Unarchive" : "Archive"}
+              </button>
+
+              {/* Delete project button */}
+              <button
+                onClick={() => setIsDeleteProjectModalOpen(true)}
+                className="cursor-pointer rounded-xl border border-danger/20 bg-danger/5 px-4 py-2 text-sm font-medium text-danger transition-all hover:bg-danger/10 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                Delete Project
+              </button>
+            </div>
           </div>
 
           {/* Progress bar */}

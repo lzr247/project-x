@@ -67,7 +67,11 @@ export const validateUpdateProject = [
     .optional()
     .matches(/^#[0-9A-Fa-f]{6}$/)
     .withMessage("Color must be a valid hex code (e.g., #3B82F6)"),
-  body("isCompleted").optional().isBoolean().withMessage("isCompleted must be a boolean"),
+  body("status")
+    .optional()
+    .isIn(["ACTIVE", "COMPLETED", "ON_HOLD", "CANCELLED"])
+    .withMessage("Status must be one of: ACTIVE, COMPLETED, ON_HOLD, CANCELLED"),
+  body("isArchived").optional().isBoolean().withMessage("isArchived must be a boolean"),
   handleValidationErrors,
 ];
 

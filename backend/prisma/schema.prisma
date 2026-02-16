@@ -20,14 +20,23 @@ model User {
   pomodoros PomodoroSession[]
 }
 
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  ON_HOLD
+  CANCELLED
+}
+
 model Project {
   id            String @id @default(uuid())
   title         String
   description   String?
   color         String @default("#3B82F6")
-  isCompleted   Boolean @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  status       ProjectStatus @default(ACTIVE)
+  completedAt  DateTime?
+  isArchived   Boolean       @default(false)
 
   userId        String
   user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
