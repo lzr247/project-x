@@ -1,10 +1,12 @@
 import { faPlus, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { createGoal } from "../../api/projects.api";
 import type { CreateGoalRequest } from "../../types";
+import RichTextEditor, { stripHtml } from "../common/RichTextEditor";
 import Modal from "./Modal";
 
 interface AddGoalModalProps {
@@ -16,6 +18,7 @@ interface AddGoalModalProps {
 
 const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModalProps) => {
   const queryClient = useQueryClient();
+  const [description, setDescription] = useState("");
   const {
     register,
     handleSubmit,
@@ -24,7 +27,6 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
   } = useForm<CreateGoalRequest>({
     defaultValues: {
       title: "",
-      description: "",
     },
   });
 
@@ -35,6 +37,7 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success("Goal added successfully!");
       reset();
+      setDescription("");
       onClose();
     },
     onError: () => {
@@ -42,8 +45,15 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
     },
   });
 
+  const descriptionError = stripHtml(description).length > 500 ? "Maximum 500 characters" : null;
+
   const onSubmit = (data: CreateGoalRequest) => {
-    mutation.mutate(data);
+    if (descriptionError) return;
+    const plainDescription = stripHtml(description);
+    mutation.mutate({
+      ...data,
+      description: plainDescription ? description : undefined,
+    });
   };
 
   return (
@@ -62,7 +72,7 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
             })}
             type="text"
             placeholder="Enter goal title"
-            className="w-full rounded-xl border border-border-strong bg-surface-card px-4 py-3 text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
+            className="focus:ring-accent/20 w-full rounded-xl border border-border-strong bg-surface-card px-4 py-3 text-content outline-none transition-all focus:border-accent focus:ring-2"
           />
           {errors.title && <p className="mt-1 text-sm text-danger">{errors.title.message}</p>}
         </div>
@@ -70,15 +80,13 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
         {/* Description */}
         <div>
           <label className="mb-2 block text-sm font-medium text-content">Description</label>
-          <textarea
-            {...register("description", {
-              maxLength: { value: 500, message: "Maximum 500 characters" },
-            })}
-            rows={3}
+          <RichTextEditor
+            content={description}
+            onChange={setDescription}
             placeholder="Brief description (optional)"
-            className="w-full resize-none rounded-xl border border-border-strong bg-surface-card px-4 py-3 text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
+            maxLength={500}
           />
-          {errors.description && <p className="mt-1 text-sm text-danger">{errors.description.message}</p>}
+          {descriptionError && <p className="mt-1 text-sm text-danger">{descriptionError}</p>}
         </div>
 
         {/* Submit button */}

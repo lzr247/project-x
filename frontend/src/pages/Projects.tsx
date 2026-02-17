@@ -51,13 +51,16 @@ const Projects = () => {
         <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           {projects && projects.length >= 5 && (
             <div className="relative max-w-sm flex-1">
-              <FontAwesomeIcon icon={faSearch} className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted" />
+              <FontAwesomeIcon
+                icon={faSearch}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted"
+              />
               <input
                 type="text"
                 placeholder="Search projects..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-xl border border-border-strong bg-surface-card py-2.5 pl-11 pr-4 text-sm text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
+                className="focus:ring-accent/20 w-full rounded-xl border border-border-strong bg-surface-card py-2.5 pl-11 pr-4 text-sm text-content outline-none transition-all focus:border-accent focus:ring-2"
               />
             </div>
           )}
@@ -92,7 +95,7 @@ const Projects = () => {
         </div>
       ) : isError ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-danger/10">
+          <div className="bg-danger/10 mb-4 flex h-16 w-16 items-center justify-center rounded-full">
             <FontAwesomeIcon icon={faExclamationTriangle} className="text-2xl text-danger" />
           </div>
           <p className="text-content-secondary">Failed to load projects</p>
@@ -112,7 +115,7 @@ const Projects = () => {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-accent/10">
+          <div className="bg-accent/10 mb-6 flex h-20 w-20 items-center justify-center rounded-full">
             <FontAwesomeIcon icon={showArchived ? faArchive : faFolderOpen} className="text-3xl text-accent" />
           </div>
           <h3 className="mb-2 text-lg font-semibold text-content">

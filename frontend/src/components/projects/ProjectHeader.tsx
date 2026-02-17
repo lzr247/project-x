@@ -112,16 +112,14 @@ const ProjectHeader = ({
                   onBlur={handleSaveDescription}
                   rows={2}
                   placeholder="Add a description..."
-                  className="w-full resize-none rounded-lg border border-border-strong bg-surface-card px-3 py-2 text-sm text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
+                  className="focus:ring-accent/20 w-full resize-none rounded-lg border border-border-strong bg-surface-card px-3 py-2 text-sm text-content outline-none transition-all focus:border-accent focus:ring-2"
                   maxLength={500}
                 />
               </div>
             ) : (
               <button onClick={handleStartEditDescription} className="mt-1 cursor-pointer text-left">
                 {project.description ? (
-                  <p className="text-content-secondary transition-colors hover:text-content">
-                    {project.description}
-                  </p>
+                  <p className="text-content-secondary transition-colors hover:text-content">{project.description}</p>
                 ) : (
                   <p className="text-sm italic text-content-muted transition-colors hover:text-content-secondary">
                     Add a description...
@@ -152,7 +150,7 @@ const ProjectHeader = ({
           {project.status !== "COMPLETED" && (
             <button
               onClick={() => onUpdateStatus("COMPLETED")}
-              className="cursor-pointer rounded-xl border border-success/20 bg-success/5 px-4 py-2 text-sm font-medium text-success transition-all hover:bg-success/10"
+              className="border-success/20 bg-success/5 hover:bg-success/10 cursor-pointer rounded-xl border px-4 py-2 text-sm font-medium text-success transition-all"
             >
               <FontAwesomeIcon icon={faCheck} className="mr-2" />
               Complete
@@ -170,7 +168,7 @@ const ProjectHeader = ({
           {(project.status === "COMPLETED" || project.status === "ON_HOLD") && (
             <button
               onClick={() => onUpdateStatus("ACTIVE")}
-              className="cursor-pointer rounded-xl border border-accent/20 bg-accent/5 px-4 py-2 text-sm font-medium text-accent transition-all hover:bg-accent/10"
+              className="border-accent/20 bg-accent/5 hover:bg-accent/10 cursor-pointer rounded-xl border px-4 py-2 text-sm font-medium text-accent transition-all"
             >
               <FontAwesomeIcon icon={faPlay} className="mr-2" />
               Reactivate
@@ -205,7 +203,7 @@ const ProjectHeader = ({
                       onDeleteProject();
                       setIsDropdownOpen(false);
                     }}
-                    className="flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-sm text-danger transition-colors hover:bg-danger/5"
+                    className="hover:bg-danger/5 flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-sm text-danger transition-colors"
                   >
                     <FontAwesomeIcon icon={faTrash} className="w-4" />
                     Delete project

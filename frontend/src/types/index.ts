@@ -60,6 +60,7 @@ export interface Goal {
   title: string;
   description: string | null;
   isCompleted: boolean;
+  order: number;
   createdAt: string;
   updatedAt: string;
   projectId: string;

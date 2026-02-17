@@ -1,7 +1,7 @@
+import type { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { faDesktop, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useThemeStore } from "../store/theme.store";
-import type { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 type ThemeOption = "light" | "system" | "dark";
 
@@ -45,9 +45,7 @@ export const ThemeToggle = ({ collapsed = false }: ThemeToggleProps) => {
           key={option.value}
           onClick={() => setTheme(option.value)}
           className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs transition-all ${
-            theme === option.value
-              ? "bg-accent text-white shadow-sm"
-              : "text-sidebar-text hover:text-white"
+            theme === option.value ? "bg-accent text-white shadow-sm" : "text-sidebar-text hover:text-white"
           }`}
           title={option.label}
         >

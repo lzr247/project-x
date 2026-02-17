@@ -54,15 +54,15 @@ const RegistrationPage = () => {
     <div className="bg-linear-to-br flex min-h-screen items-center justify-center from-slate-900 via-slate-800 to-slate-900 p-4">
       {/* Decorative elements */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -right-40 -top-40 h-80 w-80 rounded-full bg-accent/20 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
+        <div className="bg-accent/20 absolute -right-40 -top-40 h-80 w-80 rounded-full blur-3xl" />
+        <div className="bg-accent/10 absolute -bottom-40 -left-40 h-80 w-80 rounded-full blur-3xl" />
       </div>
 
       <div className="relative w-full max-w-md">
-        <div className="rounded-2xl bg-surface-card/95 p-8 shadow-soft backdrop-blur-sm">
+        <div className="bg-surface-card/95 rounded-2xl p-8 shadow-soft backdrop-blur-sm">
           {/* Header */}
           <div className="mb-8 text-center">
-            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10">
+            <div className="bg-accent/10 mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl">
               <span className="text-2xl font-bold text-accent">X</span>
             </div>
             <h1 className="text-2xl font-bold text-content">Create account</h1>
@@ -70,7 +70,7 @@ const RegistrationPage = () => {
           </div>
 
           {error && (
-            <div className="mb-6 rounded-xl border border-danger/20 bg-danger/10 p-4 text-sm text-danger">{error}</div>
+            <div className="border-danger/20 bg-danger/10 mb-6 rounded-xl border p-4 text-sm text-danger">{error}</div>
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

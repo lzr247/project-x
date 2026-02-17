@@ -53,3 +53,12 @@ export const updateGoal = async (goalId: string, body: UpdateGoalRequest): Promi
 export const deleteGoal = async (goalId: string): Promise<void> => {
   await api.delete(`/goals/${goalId}`);
 };
+
+export const reorderGoals = async (projectId: string, items: { id: string; order: number }[]): Promise<void> => {
+  await api.put(`/projects/${projectId}/goals/reorder`, { items });
+};
+
+export const clearCompletedGoals = async (projectId: string): Promise<{ count: number }> => {
+  const { data } = await api.delete(`/projects/${projectId}/goals/completed`);
+  return data.data;
+};

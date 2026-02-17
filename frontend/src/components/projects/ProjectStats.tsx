@@ -30,7 +30,7 @@ const ProjectStats = ({ totalGoals, completedGoals, progress, color }: ProjectSt
         </div>
         <div className="rounded-xl border border-border bg-surface-card p-4 shadow-card">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10">
+            <div className="bg-success/10 flex h-10 w-10 items-center justify-center rounded-lg">
               <FontAwesomeIcon icon={faCheck} className="text-success" />
             </div>
             <div>

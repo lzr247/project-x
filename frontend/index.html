@@ -11,8 +11,7 @@
           var stored = JSON.parse(localStorage.getItem("theme-storage") || "{}");
           var theme = stored.state && stored.state.theme;
           var dark =
-            theme === "dark" ||
-            (theme !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+            theme === "dark" || (theme !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
           if (dark) document.documentElement.classList.add("dark");
         } catch (e) {}
       })();

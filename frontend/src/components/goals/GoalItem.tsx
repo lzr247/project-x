@@ -1,10 +1,13 @@
-import { faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { faCheck, faGripVertical, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { updateGoal } from "../../api/projects.api";
 import type { Goal } from "../../types";
+import RichTextEditor, { stripHtml } from "../common/RichTextEditor";
 
 interface GoalItemProps {
   goal: Goal;
@@ -17,6 +20,14 @@ interface GoalItemProps {
 
 const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isToggling }: GoalItemProps) => {
   const queryClient = useQueryClient();
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: goal.id,
+    disabled: goal.isCompleted,
+  });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   const [isEditing, setIsEditing] = useState(false);
   const [titleDraft, setTitleDraft] = useState("");
   const [descriptionDraft, setDescriptionDraft] = useState("");
@@ -60,13 +71,14 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
       setValidationError("Title must be 30 characters or less");
       return;
     }
-    if (descriptionDraft.trim().length > 500) {
+    const plainDescription = stripHtml(descriptionDraft);
+    if (plainDescription.length > 500) {
       setValidationError("Description must be 500 characters or less");
       return;
     }
     editMutation.mutate({
       title: trimmedTitle,
-      description: descriptionDraft.trim() || undefined,
+      description: plainDescription ? descriptionDraft : undefined,
     });
   };
 
@@ -77,10 +89,23 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
 
   return (
     <div
+      ref={setNodeRef}
+      style={style}
       className={`group flex items-center gap-4 rounded-xl border border-border p-4 transition-all ${
         goal.isCompleted ? "bg-surface/50" : "bg-surface-card hover:border-border-strong hover:shadow-sm"
-      }`}
+      } ${isDragging ? "z-10 opacity-50 shadow-lg" : ""}`}
     >
+      {/* Drag handle */}
+      {!goal.isCompleted && (
+        <button
+          {...attributes}
+          {...listeners}
+          className="cursor-grab touch-none text-content-muted opacity-0 transition-opacity hover:text-content active:cursor-grabbing group-hover:opacity-100"
+        >
+          <FontAwesomeIcon icon={faGripVertical} className="text-sm" />
+        </button>
+      )}
+
       {/* Checkbox */}
       {goal.isCompleted ? (
         <button
@@ -117,26 +142,22 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
               if (e.key === "Escape") handleCancel();
             }}
             maxLength={30}
-            className="w-full rounded-lg border border-border-strong bg-surface-card px-3 py-1.5 text-sm font-medium text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
+            className="focus:ring-accent/20 w-full rounded-lg border border-border-strong bg-surface-card px-3 py-1.5 text-sm font-medium text-content outline-none transition-all focus:border-accent focus:ring-2"
           />
-          <textarea
-            value={descriptionDraft}
-            onChange={(e) => {
-              setDescriptionDraft(e.target.value);
-              setValidationError(null);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSave();
-              }
-              if (e.key === "Escape") handleCancel();
-            }}
-            rows={2}
-            placeholder="Description (optional)"
-            maxLength={500}
-            className="mt-2 w-full resize-none rounded-lg border border-border-strong bg-surface-card px-3 py-1.5 text-sm text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
-          />
+          <div className="mt-2">
+            <RichTextEditor
+              content={descriptionDraft}
+              onChange={(html) => {
+                setDescriptionDraft(html);
+                setValidationError(null);
+              }}
+              placeholder="Description (optional)"
+              maxLength={500}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") handleCancel();
+              }}
+            />
+          </div>
           {validationError && <p className="mt-1 text-xs text-danger">{validationError}</p>}
           <div className="mt-2 flex items-center gap-2">
             <button
@@ -159,15 +180,21 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
           <h3 className={`font-medium ${goal.isCompleted ? "text-content-muted line-through" : "text-content"}`}>
             {goal.title}
           </h3>
-          {goal.description && (
-            <p className={`mt-0.5 text-sm ${goal.isCompleted ? "text-content-muted" : "text-content-secondary"}`}>
-              {goal.description}
-            </p>
+          {goal.description ? (
+            <div
+              className={`rich-text-content mt-0.5 text-sm ${goal.isCompleted ? "text-content-muted" : "text-content-secondary"}`}
+              dangerouslySetInnerHTML={{ __html: goal.description }}
+            />
+          ) : (
+            !goal.isCompleted && (
+              <p className="mt-0.5 text-sm italic text-content-muted opacity-0 transition-opacity group-hover:opacity-100">
+                Add description...
+              </p>
+            )
           )}
           {goal.isCompleted && goal.completedAt ? (
             <p className="mt-1.5 text-xs text-content-muted">
-              Completed{" "}
-              {new Date(goal.completedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+              Completed {new Date(goal.completedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
             </p>
           ) : (
             <p className="mt-1.5 text-xs text-content-muted">
@@ -180,7 +207,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
       {/* Delete */}
       <button
         onClick={() => onDelete(goal)}
-        className="cursor-pointer rounded-lg p-2 text-content-muted opacity-0 transition-all hover:bg-danger/10 hover:text-danger group-hover:opacity-100"
+        className="hover:bg-danger/10 cursor-pointer rounded-lg p-2 text-content-muted opacity-0 transition-all hover:text-danger group-hover:opacity-100"
       >
         <FontAwesomeIcon icon={faTrash} className="text-sm" />
       </button>

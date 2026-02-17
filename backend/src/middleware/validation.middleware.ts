@@ -83,11 +83,7 @@ export const validateCreateGoal = [
     .trim()
     .isLength({ min: 1, max: 30 })
     .withMessage("Title must be between 1 and 30 characters"),
-  body("description")
-    .optional()
-    .trim()
-    .isLength({ max: 500 })
-    .withMessage("Description must be less than 500 characters"),
+  body("description").optional().isLength({ max: 5000 }).withMessage("Description is too long"),
   handleValidationErrors,
 ];
 
@@ -98,12 +94,16 @@ export const validateUpdateGoal = [
     .trim()
     .isLength({ min: 1, max: 30 })
     .withMessage("Title must be between 1 and 30 characters"),
-  body("description")
-    .optional()
-    .trim()
-    .isLength({ max: 500 })
-    .withMessage("Description must be less than 500 characters"),
+  body("description").optional().isLength({ max: 5000 }).withMessage("Description is too long"),
   body("isCompleted").optional().isBoolean().withMessage("isCompleted must be a boolean"),
+  handleValidationErrors,
+];
+
+// Reorder goals validation
+export const validateReorderGoals = [
+  body("items").isArray({ min: 1 }).withMessage("Items must be a non-empty array"),
+  body("items.*.id").isString().withMessage("Each item must have a string id"),
+  body("items.*.order").isInt({ min: 0 }).withMessage("Each item must have a non-negative integer order"),
   handleValidationErrors,
 ];
 
