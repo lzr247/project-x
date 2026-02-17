@@ -49,16 +49,18 @@ const Projects = () => {
 
         {/* Row 2: Search + Tabs */}
         <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative max-w-sm flex-1">
-            <FontAwesomeIcon icon={faSearch} className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted" />
-            <input
-              type="text"
-              placeholder="Search projects..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-border-strong bg-surface-card py-2.5 pl-11 pr-4 text-sm text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
-            />
-          </div>
+          {projects && projects.length >= 5 && (
+            <div className="relative max-w-sm flex-1">
+              <FontAwesomeIcon icon={faSearch} className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted" />
+              <input
+                type="text"
+                placeholder="Search projects..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-xl border border-border-strong bg-surface-card py-2.5 pl-11 pr-4 text-sm text-content outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
+              />
+            </div>
+          )}
 
           <div className="flex rounded-xl bg-surface p-1">
             <button
