@@ -81,8 +81,8 @@ export const validateCreateGoal = [
     .notEmpty()
     .withMessage("Title is required")
     .trim()
-    .isLength({ min: 1, max: 200 })
-    .withMessage("Title must be between 1 and 200 characters"),
+    .isLength({ min: 1, max: 30 })
+    .withMessage("Title must be between 1 and 30 characters"),
   body("description")
     .optional()
     .trim()
@@ -96,8 +96,8 @@ export const validateUpdateGoal = [
   body("title")
     .optional()
     .trim()
-    .isLength({ min: 1, max: 200 })
-    .withMessage("Title must be between 1 and 200 characters"),
+    .isLength({ min: 1, max: 30 })
+    .withMessage("Title must be between 1 and 30 characters"),
   body("description")
     .optional()
     .trim()

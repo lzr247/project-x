@@ -58,7 +58,7 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
             {...register("title", {
               required: "Title is required",
               minLength: { value: 1, message: "Title is required" },
-              maxLength: { value: 200, message: "Maximum 200 characters" },
+              maxLength: { value: 30, message: "Maximum 30 characters" },
             })}
             type="text"
             placeholder="Enter goal title"
