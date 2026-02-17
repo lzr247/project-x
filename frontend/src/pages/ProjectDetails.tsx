@@ -185,8 +185,8 @@ const ProjectDetails = () => {
         <div className="mb-8 flex items-center gap-4">
           <div className="h-12 w-12 animate-pulse rounded-xl bg-skeleton" />
           <div>
-            <div className="h-7 w-56 animate-pulse rounded-lg bg-skeleton" />
-            <div className="mt-2 h-4 w-80 animate-pulse rounded-lg bg-skeleton-light" />
+            <div className="h-7 w-40 animate-pulse rounded-lg bg-skeleton sm:w-56" />
+            <div className="mt-2 h-4 w-full max-w-xs animate-pulse rounded-lg bg-skeleton-light sm:w-80" />
             <div className="mt-2 h-3 w-40 animate-pulse rounded-lg bg-skeleton-light" />
           </div>
         </div>

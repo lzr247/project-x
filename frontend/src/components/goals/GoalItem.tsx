@@ -91,7 +91,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
     <div
       ref={setNodeRef}
       style={style}
-      className={`group flex items-center gap-4 rounded-xl border border-border p-4 transition-all ${
+      className={`group flex items-center gap-2 rounded-xl border border-border p-3 transition-all sm:gap-4 sm:p-4 ${
         goal.isCompleted ? "bg-surface/50" : "bg-surface-card hover:border-border-strong hover:shadow-sm"
       } ${isDragging ? "z-10 opacity-50 shadow-lg" : ""}`}
     >
@@ -100,7 +100,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
         <button
           {...attributes}
           {...listeners}
-          className="cursor-grab touch-none text-content-muted opacity-0 transition-opacity hover:text-content active:cursor-grabbing group-hover:opacity-100"
+          className="cursor-grab touch-none text-content-muted opacity-30 transition-opacity hover:opacity-100 active:cursor-grabbing group-hover:opacity-100"
         >
           <FontAwesomeIcon icon={faGripVertical} className="text-sm" />
         </button>
@@ -207,7 +207,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
       {/* Delete */}
       <button
         onClick={() => onDelete(goal)}
-        className="hover:bg-danger/10 cursor-pointer rounded-lg p-2 text-content-muted opacity-0 transition-all hover:text-danger group-hover:opacity-100"
+        className="hover:bg-danger/10 cursor-pointer rounded-lg p-2 text-content-muted opacity-100 transition-all hover:text-danger sm:opacity-0 sm:group-hover:opacity-100"
       >
         <FontAwesomeIcon icon={faTrash} className="text-sm" />
       </button>

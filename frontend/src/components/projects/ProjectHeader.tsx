@@ -60,7 +60,7 @@ const ProjectHeader = ({
 
   return (
     <div className="mb-8">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-center gap-4">
           <div
             className="flex h-12 w-12 items-center justify-center rounded-xl"
@@ -69,8 +69,8 @@ const ProjectHeader = ({
             <FontAwesomeIcon icon={faBullseye} className="text-xl" style={{ color: project.color }} />
           </div>
           <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-content">{project.title}</h1>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <h1 className="text-xl font-bold text-content sm:text-2xl">{project.title}</h1>
               <span
                 className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                   project.status === "ACTIVE"
@@ -146,32 +146,32 @@ const ProjectHeader = ({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {project.status !== "COMPLETED" && (
             <button
               onClick={() => onUpdateStatus("COMPLETED")}
-              className="border-success/20 bg-success/5 hover:bg-success/10 cursor-pointer rounded-xl border px-4 py-2 text-sm font-medium text-success transition-all"
+              className="border-success/20 bg-success/5 hover:bg-success/10 cursor-pointer rounded-xl border px-2.5 py-2 text-sm font-medium text-success transition-all sm:px-4"
             >
-              <FontAwesomeIcon icon={faCheck} className="mr-2" />
-              Complete
+              <FontAwesomeIcon icon={faCheck} className="sm:mr-2" />
+              <span className="hidden sm:inline">Complete</span>
             </button>
           )}
           {project.status !== "ON_HOLD" && (
             <button
               onClick={() => onUpdateStatus("ON_HOLD")}
-              className="cursor-pointer rounded-xl border border-yellow-300/50 bg-yellow-50 px-4 py-2 text-sm font-medium text-yellow-700 transition-all hover:bg-yellow-100"
+              className="cursor-pointer rounded-xl border border-yellow-300/50 bg-yellow-50 px-2.5 py-2 text-sm font-medium text-yellow-700 transition-all hover:bg-yellow-100 sm:px-4"
             >
-              <FontAwesomeIcon icon={faPause} className="mr-2" />
-              On Hold
+              <FontAwesomeIcon icon={faPause} className="sm:mr-2" />
+              <span className="hidden sm:inline">On Hold</span>
             </button>
           )}
           {(project.status === "COMPLETED" || project.status === "ON_HOLD") && (
             <button
               onClick={() => onUpdateStatus("ACTIVE")}
-              className="border-accent/20 bg-accent/5 hover:bg-accent/10 cursor-pointer rounded-xl border px-4 py-2 text-sm font-medium text-accent transition-all"
+              className="border-accent/20 bg-accent/5 hover:bg-accent/10 cursor-pointer rounded-xl border px-2.5 py-2 text-sm font-medium text-accent transition-all sm:px-4"
             >
-              <FontAwesomeIcon icon={faPlay} className="mr-2" />
-              Reactivate
+              <FontAwesomeIcon icon={faPlay} className="sm:mr-2" />
+              <span className="hidden sm:inline">Reactivate</span>
             </button>
           )}
 
@@ -186,7 +186,7 @@ const ProjectHeader = ({
             {isDropdownOpen && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setIsDropdownOpen(false)} />
-                <div className="absolute right-0 top-full z-20 mt-2 w-48 overflow-hidden rounded-xl border border-border bg-surface-card py-1 shadow-card-hover">
+                <div className="absolute left-0 top-full z-20 mt-2 w-48 overflow-hidden rounded-xl border border-border bg-surface-card py-1 shadow-card-hover sm:left-auto sm:right-0">
                   <button
                     onClick={() => {
                       onArchive();
