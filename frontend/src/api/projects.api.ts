@@ -1,7 +1,9 @@
 import type {
   CreateGoalRequest,
   CreateProjectRequest,
+  GetProjectsParams,
   Goal,
+  PaginatedResponse,
   Project,
   ProjectWithGoals,
   UpdateGoalRequest,
@@ -10,9 +12,15 @@ import type {
 import api from "./axios.config";
 
 // Projects API
-export const getProjects = async (archived: boolean = false): Promise<Project[]> => {
-  const { data } = await api.get(`/projects?archived=${archived}`);
-  return data.data;
+export const getProjects = async (params: GetProjectsParams = {}): Promise<PaginatedResponse<Project>> => {
+  const query = new URLSearchParams();
+  if (params.archived) query.set("archived", "true");
+  if (params.page) query.set("page", String(params.page));
+  if (params.limit) query.set("limit", String(params.limit));
+  if (params.status) query.set("status", params.status);
+  if (params.search) query.set("search", params.search);
+  const { data } = await api.get(`/projects?${query.toString()}`);
+  return { data: data.data, pagination: data.pagination };
 };
 
 export const getProjectById = async (id: string): Promise<ProjectWithGoals> => {

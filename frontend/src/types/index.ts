@@ -81,3 +81,23 @@ export interface UpdateGoalRequest {
   description?: string;
   isCompleted?: boolean;
 }
+
+export interface Pagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: Pagination;
+}
+
+export interface GetProjectsParams {
+  archived?: boolean;
+  page?: number;
+  limit?: number;
+  status?: ProjectStatus;
+  search?: string;
+}

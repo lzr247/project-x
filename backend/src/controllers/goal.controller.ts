@@ -53,21 +53,20 @@ export const createGoal = async (req: Request, res: Response) => {
       });
     }
 
-    const maxOrderGoal = await prisma.goal.findFirst({
-      where: { projectId, isCompleted: false },
-      orderBy: { order: "desc" },
-      select: { order: true },
-    });
-    const nextOrder = (maxOrderGoal?.order ?? -1) + 1;
-
-    const goal = await prisma.goal.create({
-      data: {
-        title,
-        description,
-        projectId,
-        order: nextOrder,
-      },
-    });
+    const [, goal] = await prisma.$transaction([
+      prisma.goal.updateMany({
+        where: { projectId, isCompleted: false },
+        data: { order: { increment: 1 } },
+      }),
+      prisma.goal.create({
+        data: {
+          title,
+          description,
+          projectId,
+          order: 0,
+        },
+      }),
+    ]);
 
     return res.status(201).json({
       success: true,

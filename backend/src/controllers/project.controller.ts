@@ -1,21 +1,47 @@
+import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 import { prisma } from "../config/database";
+
+const VALID_STATUSES = ["ACTIVE", "COMPLETED", "ON_HOLD", "CANCELLED"];
 
 // GET /api/projects
 export const getProjects = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
     const showArchived = req.query.archived === "true";
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 20));
+    const skip = (page - 1) * limit;
+    const status = req.query.status as string | undefined;
+    const search = req.query.search as string | undefined;
 
-    const projects = await prisma.project.findMany({
-      where: { userId, isArchived: showArchived },
-      include: {
-        _count: {
-          select: { goals: true },
+    const where: Prisma.ProjectWhereInput = {
+      userId,
+      isArchived: showArchived,
+    };
+
+    if (status && VALID_STATUSES.includes(status)) {
+      where.status = status as Prisma.EnumProjectStatusFilter;
+    }
+
+    if (search && search.trim()) {
+      where.title = { contains: search.trim(), mode: "insensitive" };
+    }
+
+    const [projects, total] = await prisma.$transaction([
+      prisma.project.findMany({
+        where,
+        include: {
+          _count: {
+            select: { goals: true },
+          },
         },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.project.count({ where }),
+    ]);
 
     // Add completedGoals count
     const projectsWithCounts = await Promise.all(
@@ -37,6 +63,12 @@ export const getProjects = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       data: projectsWithCounts,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     return res.status(500).json({
