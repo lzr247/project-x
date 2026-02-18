@@ -1,8 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 import { prisma } from "../config/database";
-
-const VALID_STATUSES = ["ACTIVE", "COMPLETED", "ON_HOLD", "CANCELLED"];
+import { PROJECTS_PAGE_DEFAULT_LIMIT, PROJECTS_PAGE_MAX_LIMIT, VALID_PROJECT_STATUSES } from "../consts";
 
 // GET /api/projects
 export const getProjects = async (req: Request, res: Response) => {
@@ -10,7 +9,7 @@ export const getProjects = async (req: Request, res: Response) => {
     const userId = req.user?.userId;
     const showArchived = req.query.archived === "true";
     const page = Math.max(1, parseInt(req.query.page as string) || 1);
-    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 20));
+    const limit = Math.min(PROJECTS_PAGE_MAX_LIMIT, Math.max(1, parseInt(req.query.limit as string) || PROJECTS_PAGE_DEFAULT_LIMIT));
     const skip = (page - 1) * limit;
     const status = req.query.status as string | undefined;
     const search = req.query.search as string | undefined;
@@ -20,7 +19,7 @@ export const getProjects = async (req: Request, res: Response) => {
       isArchived: showArchived,
     };
 
-    if (status && VALID_STATUSES.includes(status)) {
+    if (status && (VALID_PROJECT_STATUSES as readonly string[]).includes(status)) {
       where.status = status as Prisma.EnumProjectStatusFilter;
     }
 

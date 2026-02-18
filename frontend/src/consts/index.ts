@@ -1,3 +1,15 @@
+import type { ProjectStatus } from "../types";
+
+export const PROJECT_STATUS_FILTERS: { label: string; value: ProjectStatus | "ALL" }[] = [
+  { label: "All", value: "ALL" },
+  { label: "Active", value: "ACTIVE" },
+  { label: "Completed", value: "COMPLETED" },
+  { label: "On Hold", value: "ON_HOLD" },
+  { label: "Cancelled", value: "CANCELLED" },
+];
+
+export const PROJECTS_PAGE_LIMIT = 20;
+
 export const PRESET_COLORS = [
   "#3B82F6", // Blue
   "#6366F1", // Indigo

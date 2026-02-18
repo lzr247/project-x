@@ -15,15 +15,8 @@ import { getProjects } from "../api/projects.api";
 import CreateProjectModal from "../components/modals/CreateProjectModal";
 import ProjectCard from "../components/projects/ProjectCard";
 import { ProjectCardSkeleton } from "../components/skeletons/ProjectCardSkeleton";
+import { PROJECT_STATUS_FILTERS, PROJECTS_PAGE_LIMIT } from "../consts";
 import type { ProjectStatus } from "../types";
-
-const STATUS_FILTERS: { label: string; value: ProjectStatus | "ALL" }[] = [
-  { label: "All", value: "ALL" },
-  { label: "Active", value: "ACTIVE" },
-  { label: "Completed", value: "COMPLETED" },
-  { label: "On Hold", value: "ON_HOLD" },
-  { label: "Cancelled", value: "CANCELLED" },
-];
 
 const Projects = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -90,7 +83,7 @@ const Projects = () => {
       getProjects({
         archived: showArchived,
         page,
-        limit: 20,
+        limit: PROJECTS_PAGE_LIMIT,
         status: statusFilter !== "ALL" ? statusFilter : undefined,
         search: searchInUrl || undefined,
       }),
@@ -163,7 +156,7 @@ const Projects = () => {
 
         {/* Row 3: Status filters */}
         <div className="mt-3 flex flex-wrap gap-2">
-          {STATUS_FILTERS.map((filter) => (
+          {PROJECT_STATUS_FILTERS.map((filter) => (
             <button
               key={filter.value}
               onClick={() => handleStatusChange(filter.value)}
