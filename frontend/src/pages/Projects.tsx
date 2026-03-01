@@ -27,14 +27,7 @@ const Projects = () => {
   const statusFilter = (searchParams.get("status") ?? "ALL") as ProjectStatus | "ALL";
   const searchInUrl = searchParams.get("search") ?? "";
   const showArchived = searchParams.get("archived") === "true";
-
-  // Local input state for debouncing — initialised from URL
   const [inputValue, setInputValue] = useState(searchInUrl);
-
-  // Sync input if URL changes externally (browser back/forward)
-  useEffect(() => {
-    setInputValue(searchInUrl);
-  }, [searchInUrl]);
 
   // Write URL params helper — removes params that are at their default value to keep URL clean
   const setParams = (updates: Record<string, string | null>) => {
@@ -53,15 +46,6 @@ const Projects = () => {
       { replace: true }
     );
   };
-
-  // Debounce search — only write to URL when input actually differs from URL (prevents firing on mount)
-  useEffect(() => {
-    if (inputValue === searchInUrl) return;
-    const timer = setTimeout(() => {
-      setParams({ search: inputValue, page: null });
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [inputValue]);
 
   const handleStatusChange = (value: ProjectStatus | "ALL") => {
     setParams({ status: value, page: null });
@@ -87,15 +71,35 @@ const Projects = () => {
         status: statusFilter !== "ALL" ? statusFilter : undefined,
         search: searchInUrl || undefined,
       }),
-    placeholderData: keepPreviousData,
+    placeholderData: keepPreviousData, // TODO - maybe remove?
   });
 
   const projects = response?.data;
   const pagination = response?.pagination;
 
+  // Sync input if URL changes externally (browser back/forward)
+  useEffect(() => {
+    setInputValue(searchInUrl);
+  }, [searchInUrl]);
+
+  // Debounce search — only write to URL when input actually differs from URL (prevents firing on mount)
+  useEffect(() => {
+    if (inputValue === searchInUrl) return;
+    const timer = setTimeout(() => {
+      setParams({ search: inputValue, page: null });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [inputValue]);
+
   // Redirect to page 1 if requested page is out of range — only when response is for current page
   useEffect(() => {
-    if (!isFetching && pagination && pagination.page === page && pagination.totalPages > 0 && page > pagination.totalPages) {
+    if (
+      !isFetching &&
+      pagination &&
+      pagination.page === page &&
+      pagination.totalPages > 0 &&
+      page > pagination.totalPages
+    ) {
       setParams({ page: null });
     }
   }, [isFetching, pagination, page]);
