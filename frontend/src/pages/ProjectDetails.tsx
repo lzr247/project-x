@@ -3,6 +3,7 @@ import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, us
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import {
   faArrowLeft,
+  faBan,
   faBullseye,
   faCheck,
   faExclamationTriangle,
@@ -39,6 +40,7 @@ const ProjectDetails = () => {
   const [isClearCompletedModalOpen, setIsClearCompletedModalOpen] = useState(false);
   const [goalToDelete, setGoalToDelete] = useState<Goal | null>(null);
   const [isCompleteProjectModalOpen, setIsCompleteProjectModalOpen] = useState(false);
+  const [isCancelProjectModalOpen, setIsCancelProjectModalOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -259,6 +261,7 @@ const ProjectDetails = () => {
         onArchive={() => archiveMutation.mutate()}
         onDeleteProject={() => setIsDeleteProjectModalOpen(true)}
         onUpdateDescription={(desc) => updateDescriptionMutation.mutate(desc)}
+        onCancelProject={() => setIsCancelProjectModalOpen(true)}
       />
 
       <ProjectStats totalGoals={totalGoals} completedGoals={completedGoals} progress={progress} color={project.color} />
@@ -428,6 +431,22 @@ const ProjectDetails = () => {
         cancelText="Not yet"
         icon={faCheck}
         variant="info"
+        isLoading={updateStatusMutation.isPending}
+      />
+
+      {/* Cancel project confirmation modal */}
+      <ConfirmModal
+        isOpen={isCancelProjectModalOpen}
+        onClose={() => setIsCancelProjectModalOpen(false)}
+        onConfirm={() => {
+          updateStatusMutation.mutate("CANCELLED");
+          setIsCancelProjectModalOpen(false);
+        }}
+        title="Cancel Project"
+        message="Are you sure you want to cancel this project? You can reactivate it later."
+        confirmText="Cancel Project"
+        icon={faBan}
+        variant="danger"
         isLoading={updateStatusMutation.isPending}
       />
     </div>

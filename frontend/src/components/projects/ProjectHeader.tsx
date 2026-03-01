@@ -1,5 +1,6 @@
 import {
   faArchive,
+  faBan,
   faBullseye,
   faCalendarAlt,
   faCheck,
@@ -19,6 +20,7 @@ interface ProjectHeaderProps {
   onArchive: () => void;
   onDeleteProject: () => void;
   onUpdateDescription: (description: string) => void;
+  onCancelProject: () => void;
 }
 
 const ProjectHeader = ({
@@ -28,6 +30,7 @@ const ProjectHeader = ({
   onArchive,
   onDeleteProject,
   onUpdateDescription,
+  onCancelProject,
 }: ProjectHeaderProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
@@ -165,7 +168,17 @@ const ProjectHeader = ({
               <span className="hidden sm:inline">On Hold</span>
             </button>
           )}
-          {(project.status === "COMPLETED" || project.status === "ON_HOLD") && (
+          {project.status !== "CANCELLED" && (
+            <button
+              onClick={onCancelProject}
+              className="border-danger/20 bg-danger/5 hover:bg-danger/10 cursor-pointer rounded-xl border px-2.5 py-2 text-sm font-medium text-danger transition-all sm:px-4"
+            >
+              <FontAwesomeIcon icon={faBan} className="sm:mr-2" />
+              <span className="hidden sm:inline">Cancel</span>
+            </button>
+          )}
+
+          {(project.status === "COMPLETED" || project.status === "ON_HOLD" || project.status === "CANCELLED") && (
             <button
               onClick={() => onUpdateStatus("ACTIVE")}
               className="border-accent/20 bg-accent/5 hover:bg-accent/10 cursor-pointer rounded-xl border px-2.5 py-2 text-sm font-medium text-accent transition-all sm:px-4"
