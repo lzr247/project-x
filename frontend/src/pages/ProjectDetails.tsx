@@ -38,6 +38,7 @@ const ProjectDetails = () => {
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
   const [isClearCompletedModalOpen, setIsClearCompletedModalOpen] = useState(false);
   const [goalToDelete, setGoalToDelete] = useState<Goal | null>(null);
+  const [isCompleteProjectModalOpen, setIsCompleteProjectModalOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -57,9 +58,16 @@ const ProjectDetails = () => {
   const toggleGoalMutation = useMutation({
     mutationFn: ({ goalId, isCompleted }: { goalId: string; isCompleted: boolean }) =>
       updateGoal(goalId, { isCompleted }),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["project", id] });
       queryClient.invalidateQueries({ queryKey: ["projects"] });
+
+      if (variables.isCompleted && project?.goals && project.status !== "COMPLETED") {
+        const otherGoals = project.goals.filter((g) => g.id !== variables.goalId);
+        if (otherGoals.every((g) => g.isCompleted)) {
+          setIsCompleteProjectModalOpen(true);
+        }
+      }
     },
     onError: () => {
       toast.error("Failed to update goal");
@@ -367,7 +375,7 @@ const ProjectDetails = () => {
         projectColor={project.color}
       />
 
-      {/* Delete Project Confirmation Modal */}
+      {/* Delete project confirmation modal */}
       <ConfirmModal
         isOpen={isDeleteProjectModalOpen}
         onClose={() => setIsDeleteProjectModalOpen(false)}
@@ -380,7 +388,7 @@ const ProjectDetails = () => {
         isLoading={deleteProjectMutation.isPending}
       />
 
-      {/* Delete Goal Confirmation Modal */}
+      {/* Delete goal confirmation modal */}
       <ConfirmModal
         isOpen={!!goalToDelete}
         onClose={() => setGoalToDelete(null)}
@@ -393,7 +401,7 @@ const ProjectDetails = () => {
         isLoading={deleteGoalMutation.isPending}
       />
 
-      {/* Clear Completed Confirmation Modal */}
+      {/* Clear completed confirmation modal */}
       <ConfirmModal
         isOpen={isClearCompletedModalOpen}
         onClose={() => setIsClearCompletedModalOpen(false)}
@@ -404,6 +412,23 @@ const ProjectDetails = () => {
         icon={faTrash}
         variant="danger"
         isLoading={clearCompletedMutation.isPending}
+      />
+
+      {/* Complete project suggestion modal */}
+      <ConfirmModal
+        isOpen={isCompleteProjectModalOpen}
+        onClose={() => setIsCompleteProjectModalOpen(false)}
+        onConfirm={() => {
+          updateStatusMutation.mutate("COMPLETED");
+          setIsCompleteProjectModalOpen(false);
+        }}
+        title="All goals completed"
+        message="All goals in this project are completed. Would you like to mark the project as complete?"
+        confirmText="Mark as Complete"
+        cancelText="Not yet"
+        icon={faCheck}
+        variant="info"
+        isLoading={updateStatusMutation.isPending}
       />
     </div>
   );
