@@ -6,16 +6,18 @@ import {
   faFolderOpen,
   faPlus,
   faSearch,
+  faSort,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getProjects } from "../api/projects.api";
+import CustomDropdown from "../components/common/CustomDropdown";
 import CreateProjectModal from "../components/modals/CreateProjectModal";
 import ProjectCard from "../components/projects/ProjectCard";
 import { ProjectCardSkeleton } from "../components/skeletons/ProjectCardSkeleton";
-import { PROJECT_STATUS_FILTERS, PROJECTS_PAGE_LIMIT } from "../consts";
+import { PROJECT_SORT_OPTIONS, PROJECT_STATUS_FILTERS, PROJECTS_PAGE_LIMIT } from "../consts";
 import type { ProjectStatus } from "../types";
 
 const Projects = () => {
@@ -27,6 +29,8 @@ const Projects = () => {
   const statusFilter = (searchParams.get("status") ?? "ALL") as ProjectStatus | "ALL";
   const searchInUrl = searchParams.get("search") ?? "";
   const showArchived = searchParams.get("archived") === "true";
+  const sort = searchParams.get("sort") ?? "createdAt_desc";
+  const [sortBy, sortOrder] = sort.split("_") as ["createdAt" | "updatedAt" | "title" | "progress", "asc" | "desc"];
   const [inputValue, setInputValue] = useState(searchInUrl);
 
   // Write URL params helper — removes params that are at their default value to keep URL clean
@@ -35,7 +39,14 @@ const Projects = () => {
       (prev) => {
         const next = new URLSearchParams(prev);
         for (const [key, value] of Object.entries(updates)) {
-          if (value === null || value === "" || value === "ALL" || value === "false" || value === "1") {
+          if (
+            value === null ||
+            value === "" ||
+            value === "ALL" ||
+            value === "false" ||
+            value === "1" ||
+            value === "createdAt_desc"
+          ) {
             next.delete(key);
           } else {
             next.set(key, value);
@@ -52,8 +63,12 @@ const Projects = () => {
   };
 
   const handleArchivedChange = (archived: boolean) => {
-    setParams({ archived: String(archived), status: null, search: null, page: null });
+    setParams({ archived: String(archived), status: null, search: null, page: null, sort: null });
     setInputValue("");
+  };
+
+  const handleSortChange = (value: string) => {
+    setParams({ sort: value === "createdAt_desc" ? null : value, page: null });
   };
 
   const {
@@ -62,7 +77,7 @@ const Projects = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["projects", { archived: showArchived, page, status: statusFilter, search: searchInUrl }],
+    queryKey: ["projects", { archived: showArchived, page, status: statusFilter, search: searchInUrl, sort }],
     queryFn: () =>
       getProjects({
         archived: showArchived,
@@ -70,6 +85,8 @@ const Projects = () => {
         limit: PROJECTS_PAGE_LIMIT,
         status: statusFilter !== "ALL" ? statusFilter : undefined,
         search: searchInUrl || undefined,
+        sortBy,
+        sortOrder,
       }),
     placeholderData: keepPreviousData, // TODO - maybe remove?
   });
@@ -141,7 +158,7 @@ const Projects = () => {
           <div className="flex rounded-xl bg-surface p-1">
             <button
               onClick={() => handleArchivedChange(false)}
-              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
+              className={`cursor-pointer rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
                 !showArchived ? "bg-surface-card text-content shadow-sm" : "text-content-muted hover:text-content"
               }`}
             >
@@ -149,7 +166,7 @@ const Projects = () => {
             </button>
             <button
               onClick={() => handleArchivedChange(true)}
-              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
+              className={`cursor-pointer rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
                 showArchived ? "bg-surface-card text-content shadow-sm" : "text-content-muted hover:text-content"
               }`}
             >
@@ -158,21 +175,24 @@ const Projects = () => {
           </div>
         </div>
 
-        {/* Row 3: Status filters */}
-        <div className="mt-3 flex flex-wrap gap-2">
-          {PROJECT_STATUS_FILTERS.map((filter) => (
-            <button
-              key={filter.value}
-              onClick={() => handleStatusChange(filter.value)}
-              className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
-                statusFilter === filter.value
-                  ? "bg-accent text-white"
-                  : "bg-surface-card text-content-secondary hover:bg-surface-hover hover:text-content"
-              }`}
-            >
-              {filter.label}
-            </button>
-          ))}
+        {/* Row 3: Status filters + Sort */}
+        <div className="mt-3 flex items-center justify-between gap-2">
+          <div className="flex flex-wrap gap-2">
+            {PROJECT_STATUS_FILTERS.map((filter) => (
+              <button
+                key={filter.value}
+                onClick={() => handleStatusChange(filter.value)}
+                className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
+                  statusFilter === filter.value
+                    ? "bg-accent text-white"
+                    : "bg-surface-card text-content-secondary hover:bg-surface-hover hover:text-content"
+                }`}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+          <CustomDropdown options={PROJECT_SORT_OPTIONS} value={sort} onChange={handleSortChange} icon={faSort} />
         </div>
       </div>
 

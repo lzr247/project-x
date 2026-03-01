@@ -100,4 +100,6 @@ export interface GetProjectsParams {
   limit?: number;
   status?: ProjectStatus;
   search?: string;
+  sortBy?: "createdAt" | "updatedAt" | "title" | "progress";
+  sortOrder?: "asc" | "desc";
 }

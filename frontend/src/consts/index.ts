@@ -8,9 +8,9 @@ export const PROJECT_STATUS_FILTERS: { label: string; value: ProjectStatus | "AL
   { label: "Cancelled", value: "CANCELLED" },
 ];
 
-export const PROJECTS_PAGE_LIMIT = 20;
+export const PROJECTS_PAGE_LIMIT: number = 20;
 
-export const PRESET_COLORS = [
+export const PRESET_COLORS: string[] = [
   "#3B82F6", // Blue
   "#6366F1", // Indigo
   "#8B5CF6", // Violet
@@ -23,4 +23,14 @@ export const PRESET_COLORS = [
   "#14B8A6", // Teal
   "#06B6D4", // Cyan
   "#64748B", // Slate
+];
+
+export const PROJECT_SORT_OPTIONS: { label: string; value: string }[] = [
+  { label: "Newest first", value: "createdAt_desc" },
+  { label: "Oldest first", value: "createdAt_asc" },
+  { label: "Recently updated", value: "updatedAt_desc" },
+  { label: "Name A→Z", value: "title_asc" },
+  { label: "Name Z→A", value: "title_desc" },
+  { label: "Progress (highest)", value: "progress_desc" },
+  { label: "Progress (lowest)", value: "progress_asc" },
 ];

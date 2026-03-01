@@ -19,6 +19,8 @@ export const getProjects = async (params: GetProjectsParams = {}): Promise<Pagin
   if (params.limit) query.set("limit", String(params.limit));
   if (params.status) query.set("status", params.status);
   if (params.search) query.set("search", params.search);
+  if (params.sortBy) query.set("sortBy", params.sortBy);
+  if (params.sortOrder) query.set("sortOrder", params.sortOrder);
   const { data } = await api.get(`/projects?${query.toString()}`);
   return { data: data.data, pagination: data.pagination };
 };
