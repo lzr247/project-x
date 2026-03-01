@@ -12,7 +12,7 @@ import type {
 import api from "./axios.config";
 
 // Projects API
-export const getProjects = async (params: GetProjectsParams = {}): Promise<PaginatedResponse<Project>> => {
+export const getProjects = async (params: GetProjectsParams = {}, signal?: AbortSignal): Promise<PaginatedResponse<Project>> => {
   const query = new URLSearchParams();
   if (params.archived) query.set("archived", "true");
   if (params.page) query.set("page", String(params.page));
@@ -21,7 +21,7 @@ export const getProjects = async (params: GetProjectsParams = {}): Promise<Pagin
   if (params.search) query.set("search", params.search);
   if (params.sortBy) query.set("sortBy", params.sortBy);
   if (params.sortOrder) query.set("sortOrder", params.sortOrder);
-  const { data } = await api.get(`/projects?${query.toString()}`);
+  const { data } = await api.get(`/projects?${query.toString()}`, { signal });
   return { data: data.data, pagination: data.pagination };
 };
 

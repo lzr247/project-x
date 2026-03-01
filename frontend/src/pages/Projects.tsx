@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getProjects } from "../api/projects.api";
 import CustomDropdown from "../components/common/CustomDropdown";
@@ -32,6 +32,14 @@ const Projects = () => {
   const sort = searchParams.get("sort") ?? "createdAt_desc";
   const [sortBy, sortOrder] = sort.split("_") as ["createdAt" | "updatedAt" | "title" | "progress", "asc" | "desc"];
   const [inputValue, setInputValue] = useState(searchInUrl);
+  const [prevSearchUrl, setPrevSearchUrl] = useState(searchInUrl);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Sync input when URL changes externally (browser back/fwd)
+  if (searchInUrl !== prevSearchUrl) {
+    setPrevSearchUrl(searchInUrl);
+    setInputValue(searchInUrl);
+  }
 
   // Write URL params helper — removes params that are at their default value to keep URL clean
   const setParams = (updates: Record<string, string | null>) => {
@@ -63,12 +71,21 @@ const Projects = () => {
   };
 
   const handleArchivedChange = (archived: boolean) => {
-    setParams({ archived: String(archived), status: null, search: null, page: null, sort: null });
+    if (debounceRef.current) clearTimeout(debounceRef.current);
     setInputValue("");
+    setParams({ archived: String(archived), status: null, search: null, page: null, sort: null });
   };
 
   const handleSortChange = (value: string) => {
     setParams({ sort: value === "createdAt_desc" ? null : value, page: null });
+  };
+
+  const handleSearchChange = (value: string) => {
+    setInputValue(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setParams({ search: value, page: null });
+    }, 300);
   };
 
   const {
@@ -78,35 +95,29 @@ const Projects = () => {
     isError,
   } = useQuery({
     queryKey: ["projects", { archived: showArchived, page, status: statusFilter, search: searchInUrl, sort }],
-    queryFn: () =>
-      getProjects({
-        archived: showArchived,
-        page,
-        limit: PROJECTS_PAGE_LIMIT,
-        status: statusFilter !== "ALL" ? statusFilter : undefined,
-        search: searchInUrl || undefined,
-        sortBy,
-        sortOrder,
-      }),
-    placeholderData: keepPreviousData, // TODO - maybe remove?
+    queryFn: ({ signal }) =>
+      getProjects(
+        {
+          archived: showArchived,
+          page,
+          limit: PROJECTS_PAGE_LIMIT,
+          status: statusFilter !== "ALL" ? statusFilter : undefined,
+          search: searchInUrl || undefined,
+          sortBy,
+          sortOrder,
+        },
+        signal
+      ),
+    placeholderData: keepPreviousData,
   });
 
   const projects = response?.data;
   const pagination = response?.pagination;
 
-  // Sync input if URL changes externally (browser back/forward)
+  // Cancel any pending debounce when URL search changes externally (browser back/fwd)
   useEffect(() => {
-    setInputValue(searchInUrl);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
   }, [searchInUrl]);
-
-  // Debounce search — only write to URL when input actually differs from URL (prevents firing on mount)
-  useEffect(() => {
-    if (inputValue === searchInUrl) return;
-    const timer = setTimeout(() => {
-      setParams({ search: inputValue, page: null });
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [inputValue]);
 
   // Redirect to page 1 if requested page is out of range — only when response is for current page
   useEffect(() => {
@@ -150,7 +161,7 @@ const Projects = () => {
               type="text"
               placeholder="Search projects..."
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="focus:ring-accent/20 w-full rounded-xl border border-border-strong bg-surface-card py-2.5 pl-11 pr-4 text-sm text-content outline-none transition-all focus:border-accent focus:ring-2"
             />
           </div>
