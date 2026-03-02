@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   clearCompletedGoals,
   deleteGoal,
@@ -35,6 +35,7 @@ const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [isAddGoalModalOpen, setIsAddGoalModalOpen] = useState(false);
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
   const [isClearCompletedModalOpen, setIsClearCompletedModalOpen] = useState(false);
@@ -188,6 +189,14 @@ const ProjectDetails = () => {
     reorderMutation.mutate(items);
   };
 
+  const handleBack = () => {
+    if (state?.fromProjects) {
+      navigate(-1);
+    } else {
+      navigate("/projects");
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-full">
@@ -246,13 +255,13 @@ const ProjectDetails = () => {
   return (
     <div className="min-h-full">
       {/* Back link */}
-      <Link
-        to="/projects"
-        className="mb-6 inline-flex items-center gap-2 text-sm text-content-secondary transition-colors hover:text-accent"
+      <button
+        onClick={handleBack}
+        className="mb-6 inline-flex cursor-pointer items-center gap-2 text-sm text-content-secondary transition-colors hover:text-accent"
       >
         <FontAwesomeIcon icon={faArrowLeft} />
         Back to projects
-      </Link>
+      </button>
 
       <ProjectHeader
         project={project}

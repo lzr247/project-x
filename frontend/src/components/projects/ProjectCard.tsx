@@ -15,6 +15,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <Link
       to={`/project/${project.id}`}
+      state={{ fromProjects: true }}
       className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface-card shadow-card transition-all duration-300 hover:border-border-strong hover:shadow-card-hover"
     >
       {/* Color bar */}
