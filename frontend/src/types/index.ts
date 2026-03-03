@@ -61,6 +61,7 @@ export interface Goal {
   description: string | null;
   isCompleted: boolean;
   order: number;
+  dueDate: string | null;
   createdAt: string;
   updatedAt: string;
   projectId: string;
@@ -74,12 +75,14 @@ export interface ProjectWithGoals extends Project {
 export interface CreateGoalRequest {
   title: string;
   description?: string;
+  dueDate?: string;
 }
 
 export interface UpdateGoalRequest {
   title?: string;
   description?: string;
   isCompleted?: boolean;
+  dueDate?: string | null;
 }
 
 export interface Pagination {

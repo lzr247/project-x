@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { createGoal } from "../../api/projects.api";
 import type { CreateGoalRequest } from "../../types";
+import DatePicker from "../common/DatePicker";
 import RichTextEditor, { stripHtml } from "../common/RichTextEditor";
 import Modal from "./Modal";
 
@@ -19,6 +20,7 @@ interface AddGoalModalProps {
 const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModalProps) => {
   const queryClient = useQueryClient();
   const [description, setDescription] = useState("");
+  const [dueDate, setDueDate] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -38,6 +40,7 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
       toast.success("Goal added successfully!");
       reset();
       setDescription("");
+      setDueDate(null);
       onClose();
     },
     onError: () => {
@@ -53,6 +56,7 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
     mutation.mutate({
       ...data,
       description: plainDescription ? description : undefined,
+      dueDate: dueDate ?? undefined,
     });
   };
 
@@ -87,6 +91,19 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
             maxLength={500}
           />
           {descriptionError && <p className="mt-1 text-sm text-danger">{descriptionError}</p>}
+        </div>
+
+        {/* Due date */}
+        <div>
+          <label className="mb-2 block text-sm font-medium text-content">
+            Due date <span className="text-xs text-content-muted">(optional)</span>
+          </label>
+          <DatePicker
+            value={dueDate ?? undefined}
+            onChange={(date) => setDueDate(date)}
+            placeholder="Select due date (optional)"
+            minDate={new Date()}
+          />
         </div>
 
         {/* Submit button */}

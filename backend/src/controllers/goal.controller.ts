@@ -40,7 +40,7 @@ export const createGoal = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
     const projectId = req.params.projectId;
-    const { title, description } = req.body;
+    const { title, description, dueDate } = req.body;
 
     const project = await prisma.project.findFirst({
       where: { id: projectId, userId },
@@ -64,6 +64,7 @@ export const createGoal = async (req: Request, res: Response) => {
           description,
           projectId,
           order: 0,
+          dueDate: dueDate ? new Date(dueDate) : undefined,
         },
       }),
     ]);
@@ -85,7 +86,7 @@ export const updateGoal = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
     const goalId = req.params.id;
-    const { title, description, isCompleted } = req.body;
+    const { title, description, isCompleted, dueDate } = req.body;
 
     const existingGoal = await prisma.goal.findUnique({
       where: { id: goalId },
@@ -105,6 +106,7 @@ export const updateGoal = async (req: Request, res: Response) => {
         title,
         description,
         isCompleted,
+        dueDate: dueDate !== undefined ? (dueDate ? new Date(dueDate) : null) : undefined,
         ...(isCompleted === true && !existingGoal.isCompleted ? { completedAt: new Date() } : {}),
         ...(isCompleted === false && existingGoal.isCompleted ? { completedAt: null } : {}),
       },

@@ -1,12 +1,19 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { faCheck, faGripVertical, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarAlt,
+  faCheck,
+  faExclamationTriangle,
+  faGripVertical,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { updateGoal } from "../../api/projects.api";
 import type { Goal } from "../../types";
+import DatePicker from "../common/DatePicker";
 import RichTextEditor, { stripHtml } from "../common/RichTextEditor";
 
 interface GoalItemProps {
@@ -31,12 +38,13 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
   const [isEditing, setIsEditing] = useState(false);
   const [titleDraft, setTitleDraft] = useState("");
   const [descriptionDraft, setDescriptionDraft] = useState("");
+  const [dueDateDraft, setDueDateDraft] = useState<string | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
   const titleRef = useRef<HTMLInputElement>(null);
 
   const editMutation = useMutation({
-    mutationFn: ({ title, description }: { title: string; description?: string }) =>
-      updateGoal(goal.id, { title, description }),
+    mutationFn: ({ title, description, dueDate }: { title: string; description?: string; dueDate?: string | null }) =>
+      updateGoal(goal.id, { title, description, dueDate }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
       queryClient.invalidateQueries({ queryKey: ["projects"] });
@@ -57,6 +65,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
   const handleStartEdit = () => {
     setTitleDraft(goal.title);
     setDescriptionDraft(goal.description || "");
+    setDueDateDraft(goal.dueDate ?? null);
     setValidationError(null);
     setIsEditing(true);
   };
@@ -79,6 +88,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
     editMutation.mutate({
       title: trimmedTitle,
       description: plainDescription ? descriptionDraft : undefined,
+      dueDate: dueDateDraft,
     });
   };
 
@@ -158,6 +168,13 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
               }}
             />
           </div>
+          <div className="mt-2">
+            <DatePicker
+              value={dueDateDraft ?? undefined}
+              onChange={(date) => setDueDateDraft(date)}
+              placeholder="Due date (optional)"
+            />
+          </div>
           {validationError && <p className="mt-1 text-xs text-danger">{validationError}</p>}
           <div className="mt-2 flex items-center gap-2">
             <button
@@ -197,9 +214,32 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
               Completed {new Date(goal.completedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
             </p>
           ) : (
-            <p className="mt-1.5 text-xs text-content-muted">
-              Added {new Date(goal.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-            </p>
+            <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+              <p className="text-xs text-content-muted">
+                Added {new Date(goal.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+              </p>
+              {goal.dueDate &&
+                (() => {
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  const due = new Date(goal.dueDate);
+                  due.setHours(0, 0, 0, 0);
+                  const isOverdue = due < today;
+                  return (
+                    <p
+                      className={`flex items-center gap-1 text-xs ${isOverdue ? "text-danger" : "text-content-muted"}`}
+                    >
+                      <FontAwesomeIcon icon={isOverdue ? faExclamationTriangle : faCalendarAlt} />
+                      {isOverdue ? "Overdue · " : "Due "}
+                      {due.toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: due.getFullYear() !== new Date().getFullYear() ? "numeric" : undefined,
+                      })}
+                    </p>
+                  );
+                })()}
+            </div>
           )}
         </div>
       )}
