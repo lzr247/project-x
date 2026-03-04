@@ -36,6 +36,8 @@ export const getProjects = async (req: Request, res: Response) => {
 
     if (status && (VALID_PROJECT_STATUSES as readonly string[]).includes(status)) {
       where.status = status as Prisma.EnumProjectStatusFilter;
+    } else {
+      where.status = { not: "CANCELLED" };
     }
 
     if (search && search.trim()) {
