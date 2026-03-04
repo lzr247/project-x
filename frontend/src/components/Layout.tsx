@@ -32,7 +32,7 @@ export const Layout = () => {
       <header className="fixed left-0 right-0 top-0 z-20 flex h-16 items-center justify-between bg-sidebar px-4 shadow-soft lg:hidden">
         <button
           onClick={() => setSidebarOpen(true)}
-          className="p-2 text-sidebar-text transition-colors hover:text-white"
+          className="cursor-pointer p-2 text-sidebar-text transition-colors hover:text-white"
         >
           <FontAwesomeIcon icon={faBars} size="lg" />
         </button>
@@ -62,7 +62,7 @@ export const Layout = () => {
           {/* Collapse button - desktop only */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden h-8 w-8 items-center justify-center rounded-lg text-sidebar-text transition-all hover:bg-sidebar-hover hover:text-white lg:flex"
+            className="hidden h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-sidebar-text transition-all hover:bg-sidebar-hover hover:text-white lg:flex"
           >
             <FontAwesomeIcon
               icon={faChevronLeft}
@@ -71,7 +71,7 @@ export const Layout = () => {
           </button>
 
           {/* Close button - mobile only */}
-          <button onClick={closeSidebar} className="p-2 text-sidebar-text hover:text-white lg:hidden">
+          <button onClick={closeSidebar} className="cursor-pointer p-2 text-sidebar-text hover:text-white lg:hidden">
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
         </div>

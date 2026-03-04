@@ -55,6 +55,8 @@ export interface UpdateProjectRequest {
   isArchived?: boolean;
 }
 
+export type Recurrence = "DAILY" | "WEEKLY" | "MONTHLY";
+
 export interface Goal {
   id: string;
   title: string;
@@ -66,6 +68,7 @@ export interface Goal {
   updatedAt: string;
   projectId: string;
   completedAt: string | null;
+  recurrence: Recurrence | null;
 }
 
 export interface ProjectWithGoals extends Project {
@@ -76,6 +79,7 @@ export interface CreateGoalRequest {
   title: string;
   description?: string;
   dueDate?: string;
+  recurrence?: Recurrence;
 }
 
 export interface UpdateGoalRequest {
@@ -83,6 +87,13 @@ export interface UpdateGoalRequest {
   description?: string;
   isCompleted?: boolean;
   dueDate?: string | null;
+  recurrence?: Recurrence | null;
+  createNextRecurrence?: boolean;
+}
+
+export interface UpdateGoalResponse {
+  goal: Goal;
+  nextGoal: Goal | null;
 }
 
 export interface Pagination {

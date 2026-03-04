@@ -7,12 +7,16 @@ import type {
   Project,
   ProjectWithGoals,
   UpdateGoalRequest,
+  UpdateGoalResponse,
   UpdateProjectRequest,
 } from "../types";
 import api from "./axios.config";
 
 // Projects API
-export const getProjects = async (params: GetProjectsParams = {}, signal?: AbortSignal): Promise<PaginatedResponse<Project>> => {
+export const getProjects = async (
+  params: GetProjectsParams = {},
+  signal?: AbortSignal
+): Promise<PaginatedResponse<Project>> => {
   const query = new URLSearchParams();
   if (params.archived) query.set("archived", "true");
   if (params.page) query.set("page", String(params.page));
@@ -55,7 +59,7 @@ export const createGoal = async (projectId: string, body: CreateGoalRequest): Pr
   return data;
 };
 
-export const updateGoal = async (goalId: string, body: UpdateGoalRequest): Promise<Goal> => {
+export const updateGoal = async (goalId: string, body: UpdateGoalRequest): Promise<UpdateGoalResponse> => {
   const { data } = await api.put(`/goals/${goalId}`, body);
   return data;
 };

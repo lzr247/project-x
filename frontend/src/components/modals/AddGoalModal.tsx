@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { createGoal } from "../../api/projects.api";
-import type { CreateGoalRequest } from "../../types";
+import type { CreateGoalRequest, Recurrence } from "../../types";
 import DatePicker from "../common/DatePicker";
 import RichTextEditor, { stripHtml } from "../common/RichTextEditor";
 import Modal from "./Modal";
@@ -21,6 +21,7 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
   const queryClient = useQueryClient();
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState<string | null>(null);
+  const [recurrence, setRecurrence] = useState<Recurrence | null>(null);
   const {
     register,
     handleSubmit,
@@ -41,6 +42,7 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
       reset();
       setDescription("");
       setDueDate(null);
+      setRecurrence(null);
       onClose();
     },
     onError: () => {
@@ -57,6 +59,7 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
       ...data,
       description: plainDescription ? description : undefined,
       dueDate: dueDate ?? undefined,
+      recurrence: recurrence ?? undefined,
     });
   };
 
@@ -104,6 +107,30 @@ const AddGoalModal = ({ isOpen, onClose, projectId, projectColor }: AddGoalModal
             placeholder="Select due date (optional)"
             minDate={new Date()}
           />
+        </div>
+
+        {/* Recurrence */}
+        <div>
+          <label className="mb-2 block text-sm font-medium text-content">
+            Recurrence <span className="text-xs text-content-muted">(requires due date)</span>
+          </label>
+          <div className="flex gap-2">
+            {(["DAILY", "WEEKLY", "MONTHLY"] as const).map((r) => (
+              <button
+                key={r}
+                type="button"
+                disabled={!dueDate}
+                onClick={() => setRecurrence(recurrence === r ? null : r)}
+                className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-all disabled:cursor-not-allowed disabled:opacity-40 ${
+                  recurrence === r
+                    ? "bg-accent/10 border-accent text-accent"
+                    : "border-border-strong text-content-muted hover:border-accent hover:text-content"
+                }`}
+              >
+                {r.charAt(0) + r.slice(1).toLowerCase()}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Submit button */}

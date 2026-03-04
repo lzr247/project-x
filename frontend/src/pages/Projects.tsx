@@ -281,7 +281,7 @@ const Projects = () => {
           {!showArchived && (
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 font-medium text-white transition-all duration-200 hover:bg-accent-hover"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-5 py-2.5 font-medium text-white transition-all duration-200 hover:bg-accent-hover"
             >
               <FontAwesomeIcon icon={faPlus} />
               Create First Project

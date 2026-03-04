@@ -8,6 +8,7 @@ import {
   faCheck,
   faExclamationTriangle,
   faPlus,
+  faRotate,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,6 +28,7 @@ import {
 import GoalItem from "../components/goals/GoalItem";
 import AddGoalModal from "../components/modals/AddGoalModal";
 import ConfirmModal from "../components/modals/ConfirmModal";
+import Modal from "../components/modals/Modal";
 import ProjectHeader from "../components/projects/ProjectHeader";
 import ProjectStats from "../components/projects/ProjectStats";
 import type { Goal, ProjectStatus, ProjectWithGoals } from "../types";
@@ -42,6 +44,7 @@ const ProjectDetails = () => {
   const [goalToDelete, setGoalToDelete] = useState<Goal | null>(null);
   const [isCompleteProjectModalOpen, setIsCompleteProjectModalOpen] = useState(false);
   const [isCancelProjectModalOpen, setIsCancelProjectModalOpen] = useState(false);
+  const [pendingRecurrenceGoal, setPendingRecurrenceGoal] = useState<Goal | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -59,11 +62,12 @@ const ProjectDetails = () => {
   });
 
   const toggleGoalMutation = useMutation({
-    mutationFn: ({ goalId, isCompleted }: { goalId: string; isCompleted: boolean }) =>
-      updateGoal(goalId, { isCompleted }),
-    onSuccess: (_, variables) => {
+    mutationFn: ({ goalId, isCompleted, createNextRecurrence }: { goalId: string; isCompleted: boolean; createNextRecurrence?: boolean }) =>
+      updateGoal(goalId, { isCompleted, createNextRecurrence }),
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["project", id] });
       queryClient.invalidateQueries({ queryKey: ["projects"] });
+      setPendingRecurrenceGoal(null);
 
       if (variables.isCompleted && project?.goals && project.status !== "COMPLETED") {
         const otherGoals = project.goals.filter((g) => g.id !== variables.goalId);
@@ -153,7 +157,12 @@ const ProjectDetails = () => {
   });
 
   const handleToggleGoal = (goal: Goal) => {
-    toggleGoalMutation.mutate({ goalId: goal.id, isCompleted: !goal.isCompleted });
+    const completing = !goal.isCompleted;
+    if (completing && goal.recurrence && goal.dueDate) {
+      setPendingRecurrenceGoal(goal);
+      return;
+    }
+    toggleGoalMutation.mutate({ goalId: goal.id, isCompleted: completing });
   };
 
   const handleDeleteGoal = () => {
@@ -442,6 +451,52 @@ const ProjectDetails = () => {
         variant="info"
         isLoading={updateStatusMutation.isPending}
       />
+
+      {/* Recurring goal completion modal */}
+      {pendingRecurrenceGoal && (() => {
+        const goal = pendingRecurrenceGoal;
+        const [year, month, day] = goal.dueDate!.split("T")[0].split("-").map(Number);
+        const due = new Date(year, month - 1, day);
+        const recurrenceLabel = goal.recurrence === "DAILY" ? "Daily" : goal.recurrence === "WEEKLY" ? "Weekly" : "Monthly";
+        const nextDue = new Date(due);
+        if (goal.recurrence === "DAILY") nextDue.setDate(nextDue.getDate() + 1);
+        else if (goal.recurrence === "WEEKLY") nextDue.setDate(nextDue.getDate() + 7);
+        else nextDue.setMonth(nextDue.getMonth() + 1);
+        const nextFormatted = nextDue.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+        return (
+          <Modal isOpen onClose={() => setPendingRecurrenceGoal(null)} size="sm">
+            <div className="text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10">
+                <FontAwesomeIcon icon={faRotate} className="text-2xl text-accent" />
+              </div>
+              <h3 className="mb-1 text-lg font-semibold text-content">Complete recurring goal?</h3>
+              <p className="mb-1 text-sm text-content-secondary">
+                <span className="font-medium">{goal.title}</span> repeats {recurrenceLabel.toLowerCase()}.
+              </p>
+              <p className="mb-6 text-sm text-content-secondary">
+                Schedule the next occurrence for <span className="font-medium text-content">{nextFormatted}</span>?
+              </p>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => toggleGoalMutation.mutate({ goalId: goal.id, isCompleted: true, createNextRecurrence: true })}
+                  disabled={toggleGoalMutation.isPending}
+                  className="cursor-pointer rounded-xl bg-accent px-4 py-2.5 font-medium text-white transition-all hover:bg-accent-hover disabled:opacity-50"
+                >
+                  Complete & schedule next
+                </button>
+                <button
+                  onClick={() => toggleGoalMutation.mutate({ goalId: goal.id, isCompleted: true })}
+                  disabled={toggleGoalMutation.isPending}
+                  className="cursor-pointer rounded-xl border border-border-strong bg-surface-card px-4 py-2.5 font-medium text-content transition-all hover:bg-surface-hover disabled:opacity-50"
+                >
+                  Complete only
+                </button>
+              </div>
+            </div>
+          </Modal>
+        );
+      })()}
 
       {/* Cancel project confirmation modal */}
       <ConfirmModal

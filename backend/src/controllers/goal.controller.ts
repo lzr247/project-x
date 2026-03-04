@@ -40,7 +40,7 @@ export const createGoal = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
     const projectId = req.params.projectId;
-    const { title, description, dueDate } = req.body;
+    const { title, description, dueDate, recurrence } = req.body;
 
     const project = await prisma.project.findFirst({
       where: { id: projectId, userId },
@@ -65,6 +65,7 @@ export const createGoal = async (req: Request, res: Response) => {
           projectId,
           order: 0,
           dueDate: dueDate ? new Date(dueDate) : undefined,
+          recurrence: recurrence ?? undefined,
         },
       }),
     ]);
@@ -86,7 +87,7 @@ export const updateGoal = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
     const goalId = req.params.id;
-    const { title, description, isCompleted, dueDate } = req.body;
+    const { title, description, isCompleted, dueDate, recurrence, createNextRecurrence } = req.body;
 
     const existingGoal = await prisma.goal.findUnique({
       where: { id: goalId },
@@ -107,14 +108,42 @@ export const updateGoal = async (req: Request, res: Response) => {
         description,
         isCompleted,
         dueDate: dueDate !== undefined ? (dueDate ? new Date(dueDate) : null) : undefined,
+        recurrence: recurrence !== undefined ? recurrence : undefined,
         ...(isCompleted === true && !existingGoal.isCompleted ? { completedAt: new Date() } : {}),
         ...(isCompleted === false && existingGoal.isCompleted ? { completedAt: null } : {}),
       },
     });
 
+    // If recurring - create next goal
+    let nextGoal = null;
+    if (createNextRecurrence && isCompleted && !existingGoal.isCompleted && updatedGoal.recurrence && updatedGoal.dueDate) {
+      const nextDueDate = new Date(updatedGoal.dueDate);
+      if (updatedGoal.recurrence === "DAILY") nextDueDate.setDate(nextDueDate.getDate() + 1);
+      else if (updatedGoal.recurrence === "WEEKLY") nextDueDate.setDate(nextDueDate.getDate() + 7);
+      else nextDueDate.setMonth(nextDueDate.getMonth() + 1);
+
+      const [, created] = await prisma.$transaction([
+        prisma.goal.updateMany({
+          where: { projectId: existingGoal.projectId, isCompleted: false },
+          data: { order: { increment: 1 } },
+        }),
+        prisma.goal.create({
+          data: {
+            title: updatedGoal.title,
+            description: updatedGoal.description,
+            projectId: existingGoal.projectId,
+            dueDate: nextDueDate,
+            recurrence: updatedGoal.recurrence,
+            order: 0,
+          },
+        }),
+      ]);
+      nextGoal = created;
+    }
+
     return res.status(200).json({
       success: true,
-      data: updatedGoal,
+      data: { goal: updatedGoal, nextGoal },
     });
   } catch (error) {
     return res.status(500).json({

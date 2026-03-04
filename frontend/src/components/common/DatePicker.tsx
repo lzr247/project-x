@@ -33,7 +33,7 @@ const DatePicker = ({ value, onChange, placeholder = "Pick a date", minDate }: D
         <button
           type="button"
           onClick={() => onChange(null)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-content-muted transition-colors hover:text-content"
+          className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-content-muted transition-colors hover:text-content"
         >
           <FontAwesomeIcon icon={faTimes} className="text-xs" />
         </button>

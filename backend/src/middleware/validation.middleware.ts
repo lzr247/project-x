@@ -84,6 +84,11 @@ export const validateCreateGoal = [
     .isLength({ min: 1, max: 30 })
     .withMessage("Title must be between 1 and 30 characters"),
   body("description").optional().isLength({ max: 5000 }).withMessage("Description is too long"),
+  body("recurrence")
+    .optional()
+    .isIn(["DAILY", "WEEKLY", "MONTHLY"])
+    .withMessage("Recurrence must be DAILY, WEEKLY, or MONTHLY"),
+
   handleValidationErrors,
 ];
 
@@ -96,6 +101,12 @@ export const validateUpdateGoal = [
     .withMessage("Title must be between 1 and 30 characters"),
   body("description").optional().isLength({ max: 5000 }).withMessage("Description is too long"),
   body("isCompleted").optional().isBoolean().withMessage("isCompleted must be a boolean"),
+  body("recurrence")
+    .optional({ nullable: true })
+    .isIn(["DAILY", "WEEKLY", "MONTHLY", null])
+    .withMessage("Invalid recurrence value"),
+  body("createNextRecurrence").optional().isBoolean().withMessage("createNextRecurrence must be a boolean"),
+
   handleValidationErrors,
 ];
 

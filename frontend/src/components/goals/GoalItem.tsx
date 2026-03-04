@@ -5,6 +5,7 @@ import {
   faCheck,
   faExclamationTriangle,
   faGripVertical,
+  faRotate,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +13,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { updateGoal } from "../../api/projects.api";
-import type { Goal } from "../../types";
+import type { Goal, Recurrence } from "../../types";
 import DatePicker from "../common/DatePicker";
 import RichTextEditor, { stripHtml } from "../common/RichTextEditor";
 
@@ -25,7 +26,7 @@ interface GoalItemProps {
   isToggling: boolean;
 }
 
-const DueDateBadge = ({ dueDate }: { dueDate: string }) => {
+const DueDateBadge = ({ dueDate, recurrence }: { dueDate: string; recurrence: Recurrence | null }) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const [year, month, day] = dueDate.split("T")[0].split("-").map(Number);
@@ -63,6 +64,12 @@ const DueDateBadge = ({ dueDate }: { dueDate: string }) => {
   return (
     <span className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium ${style}`}>
       <FontAwesomeIcon icon={daysLeft < 0 ? faExclamationTriangle : faCalendarAlt} className="text-[10px]" />
+      {recurrence && (
+        <>
+          <FontAwesomeIcon icon={faRotate} className="text-[10px]" />
+          <span className="opacity-75">{recurrence === "DAILY" ? "Daily" : recurrence === "WEEKLY" ? "Weekly" : "Monthly"} ·</span>
+        </>
+      )}
       {label}
     </span>
   );
@@ -219,7 +226,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
               minDate={new Date()}
             />
           </div>
-          {validationError && <p className="mt-1 text-xs text-danger">{validationError}</p>}
+{validationError && <p className="mt-1 text-xs text-danger">{validationError}</p>}
           <div className="mt-2 flex items-center gap-2">
             <button
               onClick={handleSave}
@@ -262,7 +269,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
               <p className="text-xs text-content-muted">
                 Added {new Date(goal.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
               </p>
-              {goal.dueDate && <DueDateBadge dueDate={goal.dueDate} />}
+              {goal.dueDate && <DueDateBadge dueDate={goal.dueDate} recurrence={goal.recurrence} />}
             </div>
           )}
         </div>

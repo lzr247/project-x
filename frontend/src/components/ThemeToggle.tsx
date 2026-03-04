@@ -30,7 +30,7 @@ export const ThemeToggle = ({ collapsed = false }: ThemeToggleProps) => {
     return (
       <button
         onClick={handleCycle}
-        className="flex w-full items-center justify-center rounded-xl px-3 py-3 text-sidebar-text transition-all duration-200 hover:bg-sidebar-hover hover:text-white"
+        className="flex w-full cursor-pointer items-center justify-center rounded-xl px-3 py-3 text-sidebar-text transition-all duration-200 hover:bg-sidebar-hover hover:text-white"
         title={`Theme: ${currentOption.label}`}
       >
         <FontAwesomeIcon icon={currentOption.icon} />
@@ -44,7 +44,7 @@ export const ThemeToggle = ({ collapsed = false }: ThemeToggleProps) => {
         <button
           key={option.value}
           onClick={() => setTheme(option.value)}
-          className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs transition-all ${
+          className={`flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs transition-all ${
             theme === option.value ? "bg-accent text-white shadow-sm" : "text-sidebar-text hover:text-white"
           }`}
           title={option.label}
