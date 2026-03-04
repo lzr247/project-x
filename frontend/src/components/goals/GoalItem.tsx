@@ -28,8 +28,8 @@ interface GoalItemProps {
 const DueDateBadge = ({ dueDate }: { dueDate: string }) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const due = new Date(dueDate);
-  due.setHours(0, 0, 0, 0);
+  const [year, month, day] = dueDate.split("T")[0].split("-").map(Number);
+  const due = new Date(year, month - 1, day);
   const daysLeft = Math.round((due.getTime() - today.getTime()) / 86400000);
 
   const label =
@@ -216,6 +216,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
               value={dueDateDraft ?? undefined}
               onChange={(date) => setDueDateDraft(date)}
               placeholder="Due date (optional)"
+              minDate={new Date()}
             />
           </div>
           {validationError && <p className="mt-1 text-xs text-danger">{validationError}</p>}
