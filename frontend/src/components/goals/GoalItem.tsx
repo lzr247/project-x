@@ -25,6 +25,49 @@ interface GoalItemProps {
   isToggling: boolean;
 }
 
+const DueDateBadge = ({ dueDate }: { dueDate: string }) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(dueDate);
+  due.setHours(0, 0, 0, 0);
+  const daysLeft = Math.round((due.getTime() - today.getTime()) / 86400000);
+
+  const label =
+    daysLeft < 0
+      ? `Overdue · ${Math.abs(daysLeft)}d ago`
+      : daysLeft === 0
+        ? "Due today"
+        : daysLeft === 1
+          ? "Tomorrow"
+          : daysLeft <= 3
+            ? `Due in ${daysLeft} days`
+            : `Due ${due.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: due.getFullYear() !== today.getFullYear() ? "numeric" : undefined,
+              })}`;
+
+  const style =
+    daysLeft < 0
+      ? "bg-danger/10 text-danger"
+      : daysLeft === 0
+        ? "bg-orange-500/10 text-orange-500"
+        : daysLeft <= 1
+          ? "bg-amber-500/10 text-amber-500"
+          : daysLeft <= 3
+            ? "bg-yellow-500/10 text-yellow-600"
+            : daysLeft <= 7
+              ? "text-yellow-600"
+              : "text-content-muted";
+
+  return (
+    <span className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium ${style}`}>
+      <FontAwesomeIcon icon={daysLeft < 0 ? faExclamationTriangle : faCalendarAlt} className="text-[10px]" />
+      {label}
+    </span>
+  );
+};
+
 const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isToggling }: GoalItemProps) => {
   const queryClient = useQueryClient();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -218,27 +261,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
               <p className="text-xs text-content-muted">
                 Added {new Date(goal.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
               </p>
-              {goal.dueDate &&
-                (() => {
-                  const today = new Date();
-                  today.setHours(0, 0, 0, 0);
-                  const due = new Date(goal.dueDate);
-                  due.setHours(0, 0, 0, 0);
-                  const isOverdue = due < today;
-                  return (
-                    <p
-                      className={`flex items-center gap-1 text-xs ${isOverdue ? "text-danger" : "text-content-muted"}`}
-                    >
-                      <FontAwesomeIcon icon={isOverdue ? faExclamationTriangle : faCalendarAlt} />
-                      {isOverdue ? "Overdue · " : "Due "}
-                      {due.toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: due.getFullYear() !== new Date().getFullYear() ? "numeric" : undefined,
-                      })}
-                    </p>
-                  );
-                })()}
+              {goal.dueDate && <DueDateBadge dueDate={goal.dueDate} />}
             </div>
           )}
         </div>
