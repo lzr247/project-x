@@ -5,6 +5,7 @@ import {
   faArrowLeft,
   faBan,
   faBullseye,
+  faCalendarAlt,
   faCheck,
   faExclamationTriangle,
   faPlus,
@@ -45,6 +46,7 @@ const ProjectDetails = () => {
   const [isCompleteProjectModalOpen, setIsCompleteProjectModalOpen] = useState(false);
   const [isCancelProjectModalOpen, setIsCancelProjectModalOpen] = useState(false);
   const [pendingRecurrenceGoal, setPendingRecurrenceGoal] = useState<Goal | null>(null);
+  const [sortByDueDate, setSortByDueDate] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -62,8 +64,15 @@ const ProjectDetails = () => {
   });
 
   const toggleGoalMutation = useMutation({
-    mutationFn: ({ goalId, isCompleted, createNextRecurrence }: { goalId: string; isCompleted: boolean; createNextRecurrence?: boolean }) =>
-      updateGoal(goalId, { isCompleted, createNextRecurrence }),
+    mutationFn: ({
+      goalId,
+      isCompleted,
+      createNextRecurrence,
+    }: {
+      goalId: string;
+      isCompleted: boolean;
+      createNextRecurrence?: boolean;
+    }) => updateGoal(goalId, { isCompleted, createNextRecurrence }),
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["project", id] });
       queryClient.invalidateQueries({ queryKey: ["projects"] });
@@ -259,6 +268,14 @@ const ProjectDetails = () => {
     return a.order - b.order;
   });
   const incompleteGoals = sortedGoals.filter((g) => !g.isCompleted);
+  if (sortByDueDate) {
+    incompleteGoals.sort((a, b) => {
+      if (!a.dueDate && !b.dueDate) return 0;
+      if (!a.dueDate) return 1;
+      if (!b.dueDate) return -1;
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+    });
+  }
   const completedGoalsList = sortedGoals.filter((g) => g.isCompleted);
 
   return (
@@ -287,12 +304,25 @@ const ProjectDetails = () => {
       {/* Goals section header */}
       <div className="mb-4 flex items-center justify-between border-b border-border pb-4">
         <h2 className="text-lg font-semibold text-content">Goals</h2>
-        <button
-          onClick={() => setIsAddGoalModalOpen(true)}
-          className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-medium text-white shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
-        >
-          <FontAwesomeIcon icon={faPlus} /> Add goal
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setSortByDueDate((prev) => !prev)}
+            className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition-all duration-200 ${
+              sortByDueDate
+                ? "bg-accent/10 border-accent text-accent"
+                : "border-border-strong text-content-muted hover:border-accent hover:text-content"
+            }`}
+          >
+            <FontAwesomeIcon icon={faCalendarAlt} />
+            By due date
+          </button>
+          <button
+            onClick={() => setIsAddGoalModalOpen(true)}
+            className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-medium text-white shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
+          >
+            <FontAwesomeIcon icon={faPlus} /> Add goal
+          </button>
+        </div>
       </div>
 
       {/* Goals list */}
@@ -330,6 +360,7 @@ const ProjectDetails = () => {
                       onToggle={handleToggleGoal}
                       onDelete={setGoalToDelete}
                       isToggling={toggleGoalMutation.isPending}
+                      draggable={!sortByDueDate}
                     />
                   ))}
                 </div>
@@ -453,50 +484,54 @@ const ProjectDetails = () => {
       />
 
       {/* Recurring goal completion modal */}
-      {pendingRecurrenceGoal && (() => {
-        const goal = pendingRecurrenceGoal;
-        const [year, month, day] = goal.dueDate!.split("T")[0].split("-").map(Number);
-        const due = new Date(year, month - 1, day);
-        const recurrenceLabel = goal.recurrence === "DAILY" ? "Daily" : goal.recurrence === "WEEKLY" ? "Weekly" : "Monthly";
-        const nextDue = new Date(due);
-        if (goal.recurrence === "DAILY") nextDue.setDate(nextDue.getDate() + 1);
-        else if (goal.recurrence === "WEEKLY") nextDue.setDate(nextDue.getDate() + 7);
-        else nextDue.setMonth(nextDue.getMonth() + 1);
-        const nextFormatted = nextDue.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      {pendingRecurrenceGoal &&
+        (() => {
+          const goal = pendingRecurrenceGoal;
+          const [year, month, day] = goal.dueDate!.split("T")[0].split("-").map(Number);
+          const due = new Date(year, month - 1, day);
+          const recurrenceLabel =
+            goal.recurrence === "DAILY" ? "Daily" : goal.recurrence === "WEEKLY" ? "Weekly" : "Monthly";
+          const nextDue = new Date(due);
+          if (goal.recurrence === "DAILY") nextDue.setDate(nextDue.getDate() + 1);
+          else if (goal.recurrence === "WEEKLY") nextDue.setDate(nextDue.getDate() + 7);
+          else nextDue.setMonth(nextDue.getMonth() + 1);
+          const nextFormatted = nextDue.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
-        return (
-          <Modal isOpen onClose={() => setPendingRecurrenceGoal(null)} size="sm">
-            <div className="text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10">
-                <FontAwesomeIcon icon={faRotate} className="text-2xl text-accent" />
+          return (
+            <Modal isOpen onClose={() => setPendingRecurrenceGoal(null)} size="sm">
+              <div className="text-center">
+                <div className="bg-accent/10 mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full">
+                  <FontAwesomeIcon icon={faRotate} className="text-2xl text-accent" />
+                </div>
+                <h3 className="mb-1 text-lg font-semibold text-content">Complete recurring goal?</h3>
+                <p className="mb-1 text-sm text-content-secondary">
+                  <span className="font-medium">{goal.title}</span> repeats {recurrenceLabel.toLowerCase()}.
+                </p>
+                <p className="mb-6 text-sm text-content-secondary">
+                  Schedule the next occurrence for <span className="font-medium text-content">{nextFormatted}</span>?
+                </p>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() =>
+                      toggleGoalMutation.mutate({ goalId: goal.id, isCompleted: true, createNextRecurrence: true })
+                    }
+                    disabled={toggleGoalMutation.isPending}
+                    className="cursor-pointer rounded-xl bg-accent px-4 py-2.5 font-medium text-white transition-all hover:bg-accent-hover disabled:opacity-50"
+                  >
+                    Complete & schedule next
+                  </button>
+                  <button
+                    onClick={() => toggleGoalMutation.mutate({ goalId: goal.id, isCompleted: true })}
+                    disabled={toggleGoalMutation.isPending}
+                    className="cursor-pointer rounded-xl border border-border-strong bg-surface-card px-4 py-2.5 font-medium text-content transition-all hover:bg-surface-hover disabled:opacity-50"
+                  >
+                    Complete only
+                  </button>
+                </div>
               </div>
-              <h3 className="mb-1 text-lg font-semibold text-content">Complete recurring goal?</h3>
-              <p className="mb-1 text-sm text-content-secondary">
-                <span className="font-medium">{goal.title}</span> repeats {recurrenceLabel.toLowerCase()}.
-              </p>
-              <p className="mb-6 text-sm text-content-secondary">
-                Schedule the next occurrence for <span className="font-medium text-content">{nextFormatted}</span>?
-              </p>
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => toggleGoalMutation.mutate({ goalId: goal.id, isCompleted: true, createNextRecurrence: true })}
-                  disabled={toggleGoalMutation.isPending}
-                  className="cursor-pointer rounded-xl bg-accent px-4 py-2.5 font-medium text-white transition-all hover:bg-accent-hover disabled:opacity-50"
-                >
-                  Complete & schedule next
-                </button>
-                <button
-                  onClick={() => toggleGoalMutation.mutate({ goalId: goal.id, isCompleted: true })}
-                  disabled={toggleGoalMutation.isPending}
-                  className="cursor-pointer rounded-xl border border-border-strong bg-surface-card px-4 py-2.5 font-medium text-content transition-all hover:bg-surface-hover disabled:opacity-50"
-                >
-                  Complete only
-                </button>
-              </div>
-            </div>
-          </Modal>
-        );
-      })()}
+            </Modal>
+          );
+        })()}
 
       {/* Cancel project confirmation modal */}
       <ConfirmModal

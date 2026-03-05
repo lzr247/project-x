@@ -24,6 +24,7 @@ interface GoalItemProps {
   onToggle: (goal: Goal) => void;
   onDelete: (goal: Goal) => void;
   isToggling: boolean;
+  draggable?: boolean;
 }
 
 const DueDateBadge = ({ dueDate, recurrence }: { dueDate: string; recurrence: Recurrence | null }) => {
@@ -67,7 +68,9 @@ const DueDateBadge = ({ dueDate, recurrence }: { dueDate: string; recurrence: Re
       {recurrence && (
         <>
           <FontAwesomeIcon icon={faRotate} className="text-[10px]" />
-          <span className="opacity-75">{recurrence === "DAILY" ? "Daily" : recurrence === "WEEKLY" ? "Weekly" : "Monthly"} ·</span>
+          <span className="opacity-75">
+            {recurrence === "DAILY" ? "Daily" : recurrence === "WEEKLY" ? "Weekly" : "Monthly"} ·
+          </span>
         </>
       )}
       {label}
@@ -75,11 +78,19 @@ const DueDateBadge = ({ dueDate, recurrence }: { dueDate: string; recurrence: Re
   );
 };
 
-const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isToggling }: GoalItemProps) => {
+const GoalItem = ({
+  goal,
+  projectId,
+  projectColor,
+  onToggle,
+  onDelete,
+  isToggling,
+  draggable = true,
+}: GoalItemProps) => {
   const queryClient = useQueryClient();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: goal.id,
-    disabled: goal.isCompleted,
+    disabled: goal.isCompleted || !draggable,
   });
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -156,7 +167,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
       } ${isDragging ? "z-10 opacity-50 shadow-lg" : ""}`}
     >
       {/* Drag handle */}
-      {!goal.isCompleted && (
+      {!goal.isCompleted && draggable && (
         <button
           {...attributes}
           {...listeners}
@@ -226,7 +237,7 @@ const GoalItem = ({ goal, projectId, projectColor, onToggle, onDelete, isTogglin
               minDate={new Date()}
             />
           </div>
-{validationError && <p className="mt-1 text-xs text-danger">{validationError}</p>}
+          {validationError && <p className="mt-1 text-xs text-danger">{validationError}</p>}
           <div className="mt-2 flex items-center gap-2">
             <button
               onClick={handleSave}
