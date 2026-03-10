@@ -35,6 +35,8 @@ export const PROJECT_SORT_OPTIONS: { label: string; value: string }[] = [
   { label: "Progress (lowest)", value: "progress_asc" },
 ];
 
+export const RECURRENCE_OPTIONS = ["DAILY", "WEEKLY", "MONTHLY"] as const;
+
 export const DAY_HEADERS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export const MONTH_NAMES = [

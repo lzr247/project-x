@@ -1,4 +1,4 @@
-import { faExternalLink, faRotate, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faExternalLink, faPlus, faRotate, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect } from "react";
 import type { CalendarGoal } from "../../types";
@@ -9,9 +9,10 @@ interface DayDetailPanelProps {
   goals: CalendarGoal[];
   onClose: () => void;
   onGoalClick: (goal: CalendarGoal) => void;
+  onAddGoal?: (date: Date) => void;
 }
 
-const DayDetailPanel = ({ day, goals, onClose, onGoalClick }: DayDetailPanelProps) => {
+const DayDetailPanel = ({ day, goals, onClose, onGoalClick, onAddGoal }: DayDetailPanelProps) => {
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -36,10 +37,7 @@ const DayDetailPanel = ({ day, goals, onClose, onGoalClick }: DayDetailPanelProp
                 {goals.length} goal{goals.length !== 1 ? "s" : ""}
               </p>
             </div>
-            <button
-              onClick={onClose}
-              className="cursor-pointer rounded-lg p-2 transition-colors hover:bg-surface"
-            >
+            <button onClick={onClose} className="cursor-pointer rounded-lg p-2 transition-colors hover:bg-surface">
               <FontAwesomeIcon icon={faTimes} className="text-content-muted" />
             </button>
           </div>
@@ -54,10 +52,7 @@ const DayDetailPanel = ({ day, goals, onClose, onGoalClick }: DayDetailPanelProp
                   onClick={() => onGoalClick(goal)}
                   className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-border bg-surface p-3 text-left transition-all hover:border-border-strong hover:shadow-sm"
                 >
-                  <div
-                    className="h-2.5 w-2.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: goal.project.color }}
-                  />
+                  <div className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: goal.project.color }} />
                   <div className="min-w-0 flex-1">
                     <p
                       className={`truncate text-sm font-medium ${goal.isCompleted ? "text-content-muted line-through" : "text-content"}`}
@@ -74,6 +69,19 @@ const DayDetailPanel = ({ day, goals, onClose, onGoalClick }: DayDetailPanelProp
               ))}
             </div>
           )}
+        </div>
+        {/* Add goal button */}
+        <div className="border-t border-border px-6 pb-6 pt-4">
+          <button
+            onClick={() => {
+              const [year, month, d] = day.split("-").map(Number);
+              onAddGoal?.(new Date(year, month - 1, d));
+            }}
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-border-strong py-2.5 text-sm font-medium text-content-muted transition-all hover:border-accent hover:text-accent"
+          >
+            <FontAwesomeIcon icon={faPlus} className="text-xs" />
+            Add goal
+          </button>
         </div>
       </div>
     </div>

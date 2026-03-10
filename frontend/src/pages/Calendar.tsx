@@ -4,11 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCalendarGoals } from "../api/projects.api";
+import { getMonthGridDays, getWeekDays, toDateKey } from "../components/calendar/calendarUtils";
 import DayDetailPanel from "../components/calendar/DayDetailPanel";
 import MonthGrid from "../components/calendar/MonthGrid";
 import WeekStrip from "../components/calendar/WeekStrip";
+import AddGoalFromCalendarModal from "../components/modals/AddGoalFromCalendarModal";
 import { MONTH_NAMES } from "../consts";
-import { getMonthGridDays, getWeekDays, toDateKey } from "../components/calendar/calendarUtils";
 
 const Calendar = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Calendar = () => {
   const [current, setCurrent] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [mobileDay, setMobileDay] = useState(todayKey);
+  const [addGoalDate, setAddGoalDate] = useState<string | null>(null);
 
   const weekDays = getWeekDays(current);
   const monthGridDays = getMonthGridDays(current.getFullYear(), current.getMonth());
@@ -61,14 +63,17 @@ const Calendar = () => {
     <div className="min-h-full">
       {/* Desktop header */}
       <div className="mb-6 hidden items-center justify-between md:flex">
-        <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-content">{title}</h1>
-          <button
-            onClick={goToday}
-            className="cursor-pointer rounded-lg border border-border-strong px-3 py-1 text-sm font-medium text-content-muted transition-all hover:border-accent hover:text-accent"
-          >
-            Today
-          </button>
+        <div>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-content">{title}</h1>
+            <button
+              onClick={goToday}
+              className="cursor-pointer rounded-lg border border-border-strong px-3 py-1 text-sm font-medium text-content-muted transition-all hover:border-accent hover:text-accent"
+            >
+              Today
+            </button>
+          </div>
+          <p className="mt-1 text-xs text-content-muted">Only goals with a due date are shown.</p>
         </div>
         <div className="flex">
           <button
@@ -122,6 +127,7 @@ const Calendar = () => {
           goalsByDate={goalsByDate}
           isLoading={isLoading}
           onDaySelect={setMobileDay}
+          onAddGoal={setAddGoalDate}
         />
       </div>
 
@@ -134,6 +140,7 @@ const Calendar = () => {
           todayKey={todayKey}
           isLoading={isLoading}
           onDayClick={setSelectedDay}
+          onEmptyCellClick={(key) => setAddGoalDate(key)}
         />
       </div>
 
@@ -147,7 +154,15 @@ const Calendar = () => {
             navigate(`/project/${goal.project.id}`);
             setSelectedDay(null);
           }}
+          onAddGoal={(date) => {
+            setSelectedDay(null);
+            setAddGoalDate(toDateKey(date));
+          }}
         />
+      )}
+
+      {addGoalDate && (
+        <AddGoalFromCalendarModal isOpen={true} onClose={() => setAddGoalDate(null)} defaultDate={addGoalDate} />
       )}
     </div>
   );

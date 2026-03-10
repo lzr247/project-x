@@ -1,4 +1,4 @@
-import { faExternalLink, faRotate } from "@fortawesome/free-solid-svg-icons";
+import { faExternalLink, faPlus, faRotate } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import type { CalendarGoal } from "../../types";
@@ -12,6 +12,7 @@ interface WeekStripProps {
   goalsByDate: Record<string, CalendarGoal[]>;
   isLoading: boolean;
   onDaySelect: (key: string) => void;
+  onAddGoal: (key: string) => void;
 }
 
 const WeekStrip = ({
@@ -21,6 +22,7 @@ const WeekStrip = ({
   goalsByDate,
   isLoading,
   onDaySelect,
+  onAddGoal,
 }: WeekStripProps) => {
   const navigate = useNavigate();
 
@@ -111,6 +113,14 @@ const WeekStrip = ({
           ))}
         </div>
       )}
+
+      <button
+        onClick={() => onAddGoal(mobileDay)}
+        className="mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-border-strong py-2.5 text-sm font-medium text-content-muted transition-all hover:border-accent hover:text-accent"
+      >
+        <FontAwesomeIcon icon={faPlus} className="text-xs" />
+        Add goal
+      </button>
     </>
   );
 };

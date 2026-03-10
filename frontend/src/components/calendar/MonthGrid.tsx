@@ -1,6 +1,8 @@
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
-import type { CalendarGoal } from "../../types";
 import { DAY_HEADERS } from "../../consts";
+import type { CalendarGoal } from "../../types";
 import { toDateKey } from "./calendarUtils";
 import GoalChip from "./GoalChip";
 
@@ -11,6 +13,7 @@ interface MonthGridProps {
   todayKey: string;
   isLoading: boolean;
   onDayClick: (key: string) => void;
+  onEmptyCellClick: (key: string) => void;
 }
 
 const MonthGrid = ({
@@ -20,6 +23,7 @@ const MonthGrid = ({
   todayKey,
   isLoading,
   onDayClick,
+  onEmptyCellClick,
 }: MonthGridProps) => {
   const navigate = useNavigate();
 
@@ -27,10 +31,7 @@ const MonthGrid = ({
     <div className="overflow-hidden rounded-2xl border border-border">
       <div className="grid grid-cols-7 border-b border-border bg-surface-card">
         {DAY_HEADERS.map((d) => (
-          <div
-            key={d}
-            className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-content-muted"
-          >
+          <div key={d} className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-content-muted">
             {d}
           </div>
         ))}
@@ -55,19 +56,17 @@ const MonthGrid = ({
             return (
               <div
                 key={key}
-                onClick={() => onDayClick(key)}
-                className={`group min-h-32 cursor-pointer p-2 transition-colors
-                  ${!isLastRow ? "border-b" : ""} ${!isLastCol ? "border-r" : ""} border-border
-                  ${inMonth ? "bg-surface-card hover:bg-surface-hover/30" : "bg-surface/50 hover:bg-surface/70"}`}
+                onClick={() => (dayGoals.length === 0 ? onEmptyCellClick(key) : onDayClick(key))}
+                className={`group min-h-32 cursor-pointer p-2 transition-colors ${!isLastRow ? "border-b" : ""} ${!isLastCol ? "border-r" : ""} border-border ${inMonth ? "hover:bg-surface-hover/30 bg-surface-card" : "bg-surface/50 hover:bg-surface/70"}`}
               >
-                <div className="mb-1.5 flex justify-end">
+                <div className="mb-1.5 flex items-center justify-end gap-1">
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    className="invisible text-[10px] text-content-muted group-hover:visible"
+                  />
                   <span
                     className={`flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium ${
-                      isToday
-                        ? "bg-accent text-white"
-                        : inMonth
-                          ? "text-content"
-                          : "text-content-muted opacity-40"
+                      isToday ? "bg-accent text-white" : inMonth ? "text-content" : "text-content-muted opacity-40"
                     }`}
                   >
                     {day.getDate()}
@@ -75,11 +74,7 @@ const MonthGrid = ({
                 </div>
                 <div className="space-y-1">
                   {dayGoals.slice(0, 3).map((goal) => (
-                    <GoalChip
-                      key={goal.id}
-                      goal={goal}
-                      onClick={() => navigate(`/project/${goal.project.id}`)}
-                    />
+                    <GoalChip key={goal.id} goal={goal} onClick={() => navigate(`/project/${goal.project.id}`)} />
                   ))}
                   {dayGoals.length > 3 && (
                     <button
