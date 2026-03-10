@@ -116,7 +116,13 @@ export const updateGoal = async (req: Request, res: Response) => {
 
     // If recurring - create next goal
     let nextGoal = null;
-    if (createNextRecurrence && isCompleted && !existingGoal.isCompleted && updatedGoal.recurrence && updatedGoal.dueDate) {
+    if (
+      createNextRecurrence &&
+      isCompleted &&
+      !existingGoal.isCompleted &&
+      updatedGoal.recurrence &&
+      updatedGoal.dueDate
+    ) {
       const nextDueDate = new Date(updatedGoal.dueDate);
       if (updatedGoal.recurrence === "DAILY") nextDueDate.setDate(nextDueDate.getDate() + 1);
       else if (updatedGoal.recurrence === "WEEKLY") nextDueDate.setDate(nextDueDate.getDate() + 7);
@@ -257,5 +263,35 @@ export const deleteGoal = async (req: Request, res: Response) => {
       success: false,
       message: "Server error.",
     });
+  }
+};
+
+// GET /api/goals/calendar
+export const getCalendarGoals = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.userId;
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({ success: false, message: "startDate and endDate are required." });
+    }
+
+    const goals = await prisma.goal.findMany({
+      where: {
+        project: { userId },
+        dueDate: {
+          gte: new Date(startDate as string),
+          lte: new Date(endDate as string),
+        },
+      },
+      include: {
+        project: { select: { id: true, title: true, color: true } },
+      },
+      orderBy: { dueDate: "asc" },
+    });
+
+    return res.status(200).json({ success: true, data: goals });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Server error." });
   }
 };

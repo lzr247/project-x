@@ -1,4 +1,5 @@
 import type {
+  CalendarGoal,
   CreateGoalRequest,
   CreateProjectRequest,
   GetProjectsParams,
@@ -74,5 +75,10 @@ export const reorderGoals = async (projectId: string, items: { id: string; order
 
 export const clearCompletedGoals = async (projectId: string): Promise<{ count: number }> => {
   const { data } = await api.delete(`/projects/${projectId}/goals/completed`);
+  return data.data;
+};
+
+export const getCalendarGoals = async (startDate: string, endDate: string): Promise<CalendarGoal[]> => {
+  const { data } = await api.get(`/goals/calendar?startDate=${startDate}&endDate=${endDate}`);
   return data.data;
 };

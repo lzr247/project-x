@@ -34,3 +34,10 @@ export const PROJECT_SORT_OPTIONS: { label: string; value: string }[] = [
   { label: "Progress (highest)", value: "progress_desc" },
   { label: "Progress (lowest)", value: "progress_asc" },
 ];
+
+export const DAY_HEADERS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+export const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];

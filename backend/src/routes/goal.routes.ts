@@ -3,6 +3,7 @@ import {
   clearCompletedGoals,
   createGoal,
   deleteGoal,
+  getCalendarGoals,
   getGoals,
   reorderGoals,
   updateGoal,
@@ -25,6 +26,9 @@ router.put("/projects/:projectId/goals/reorder", validateReorderGoals, reorderGo
 
 // DELETE /api/projects/:projectId/goals/completed
 router.delete("/projects/:projectId/goals/completed", clearCompletedGoals);
+
+// GET /api/goals/calendar
+router.get("/goals/calendar", getCalendarGoals);
 
 // PUT /api/goals/:id
 router.put("/goals/:id", validateUpdateGoal, updateGoal);

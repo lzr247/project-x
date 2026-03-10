@@ -4,6 +4,7 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 import PublicRoute from "./components/common/PublicRoute";
 import { Layout } from "./components/Layout";
 import { ThemeInitializer } from "./components/ThemeInitializer";
+import Calendar from "./pages/Calendar";
 import Dashboard from "./pages/Dashboard";
 import LoginPage from "./pages/Login";
 import Pomodoro from "./pages/Pomodoro";
@@ -29,6 +30,7 @@ const App = () => {
               <Route path="/" element={<Dashboard />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/project/:id" element={<ProjectDetails />} />
+              <Route path="/calendar" element={<Calendar />} />
               <Route path="/pomodoro" element={<Pomodoro />} />
             </Route>
           </Route>

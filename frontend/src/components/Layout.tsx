@@ -1,5 +1,6 @@
 import {
   faBars,
+  faCalendarAlt,
   faChartLine,
   faChevronLeft,
   faClock,
@@ -15,6 +16,7 @@ import { ThemeToggle } from "./ThemeToggle";
 const navItems = [
   { path: "/", label: "Dashboard", icon: faChartLine },
   { path: "/projects", label: "Projects", icon: faFolderOpen },
+  { path: "/calendar", label: "Calendar", icon: faCalendarAlt },
   { path: "/pomodoro", label: "Pomodoro", icon: faClock },
 ];
 

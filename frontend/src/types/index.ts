@@ -96,6 +96,14 @@ export interface UpdateGoalResponse {
   nextGoal: Goal | null;
 }
 
+export interface CalendarGoal extends Goal {
+  project: {
+    id: string;
+    title: string;
+    color: string;
+  };
+}
+
 export interface Pagination {
   page: number;
   limit: number;
